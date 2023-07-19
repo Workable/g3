@@ -3,7 +3,10 @@ from typing import Annotated
 
 import typer
 
+from g3.config import Config
+
 app = typer.Typer()
+config = Config()
 
 
 class MessageTone(str, Enum):
@@ -11,6 +14,21 @@ class MessageTone(str, Enum):
     PERSONAL = "personal"
     FRIENDLY = "friendly"
     FUNNY = "funny"
+
+
+@app.command()
+def configure() -> None:
+    """Configure G3"""
+    github_token = typer.prompt("🐙 GitHub token", default=config.get("credentials", "github_token"))
+    openai_key = typer.prompt("✨ OpenAI key", default=config.get("credentials", "openai_key"))
+    tone = typer.prompt("🗣️ Default tone", default=config.get("commit", "tone", default=MessageTone.FRIENDLY.value))
+
+    config.set("credentials", "github_token", github_token)
+    config.set("credentials", "openai_key", openai_key)
+    config.set("commit", "tone", tone)
+    config.save_config()
+
+    typer.echo(f"✅ Config file located at: {config.config_file}")
 
 
 @app.command()
