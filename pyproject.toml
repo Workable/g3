@@ -2,7 +2,7 @@
 name = "g3"
 version = "0.1.0"
 description = "An AI-powered CLI tool to help you write better commit messages and PRs."
-authors = ["Ioannis Karachristos <ioannis@workable.com>"]
+authors = ["Ioannis Karachristos <ioannis@workable.com>", "Kostis Kyrkos <konstantinos.kyrkos@workable.com>"]
 readme = "README.md"
 
 [tool.poetry.scripts]
@@ -11,6 +11,7 @@ g3 = "g3.main:app"
 [tool.poetry.dependencies]
 python = "^3.11"
 typer = {extras = ["all"], version = "^0.9.0"}
+openai = "^0.27.8"
 
 
 [tool.poetry.group.lint.dependencies]
