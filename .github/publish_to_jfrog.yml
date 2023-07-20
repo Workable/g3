@@ -1,0 +1,27 @@
+name: Push project build to JFrog Artifactory
+
+on:
+  push:
+    branches:
+      - main
+  tags:
+    - "*pre"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # This action checks out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install poetry and build the project
+        run: |
+          pip install poetry
+          poetry install
+          make deploy
