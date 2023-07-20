@@ -47,7 +47,7 @@ jobs:
         run: |
           pip install poetry
           poetry self add poetry-version-plugin
-          shashort=git rev-parse --short HEAD
+          shashort=$(git rev-parse --short HEAD)
           git tag main_${shashort}
           make deploy
 
