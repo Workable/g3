@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
+import tiktoken
 from pydantic import BaseModel
 
 from g3.git.diff import Diff, get_filenames, get_files_changed
@@ -30,6 +31,15 @@ class GitInfo(BaseModel):
     branch: Optional[str] = None
     filenames: Optional[List[str]] = None
     diffs: Optional[List[Diff]] = None
+
+    @property
+    def tokens_of_diffs(self) -> Optional[int]:
+        if not self.diffs:
+          return None
+
+        encoding = tiktoken.encoding_for_model(config.model)
+        return sum(len(encoding.encode(diff)) for diff in self.diffs)
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
