@@ -2,36 +2,37 @@ import time
 
 import editor
 import inquirer
+from rich.console import Console
+from rich.markdown import Markdown
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
-def display_selection(messages, type, field="message"):
+def display_selection(message, type, field="message"):
     options = [
-        "[Edit]",
-        "[Regenerate]",
+        "Submit",
+        "Edit",
+        "Regenerate",
     ]
+
+    print(f"\n[+] Generated {type} {field}:\n")
+    console = Console()
+    md = Markdown(message, "github-dark")
+    console.print(md)
+
+    print()
     questions = [
         inquirer.List(
             "selection",
-            message=f"Choose a {type} {field}",
-            choices=messages + options,
+            message="Action",
+            choices=options,
         )
     ]
 
     selection = inquirer.prompt(questions)["selection"]
 
-    if selection == "[Edit]":
-        questions = [
-            inquirer.List(
-                "selection",
-                message=f"Choose a {type} {field} to edit",
-                choices=messages,
-            )
-        ]
-        selection = inquirer.prompt(questions)["selection"]
-        selection = editor.edit(contents=selection)
-        print(selection.decode())
-    elif selection == "[Regenerate]":
+    if selection == "Edit":
+        message = editor.edit(contents=message).decode()
+    elif selection == "Regenerate":
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
@@ -41,4 +42,4 @@ def display_selection(messages, type, field="message"):
             time.sleep(5)
         # Placeholder for AI
 
-    return selection
+    return message
