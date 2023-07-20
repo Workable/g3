@@ -17,5 +17,5 @@ def test_shell():
 def test_gitinfo():
     info = GitInfo()
 
-    assert info.repo_name == "g3"
+    assert info.repo == "g3"
     assert info.repo_owner == "Workable"

@@ -26,11 +26,10 @@ def parse_git_remote_info(repo_info: str) -> List[str]:
 
 class GitInfo(BaseModel):
     repo_owner: Optional[str] = None
-    repo_name: Optional[str] = None
+    repo: Optional[str] = None
     branch: Optional[str] = None
     filenames: Optional[List[str]] = None
     diffs: Optional[List[Diff]] = None
-    branch_name: Optional[str] = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -42,8 +41,7 @@ class GitInfo(BaseModel):
 
         self.branch = sh.git("rev-parse", "--abbrev-ref", "HEAD")
         repo_info = sh.git("config", "--get", "remote.origin.url")
-        self.repo_name, self.repo_owner = parse_git_remote_info(repo_info)
+        self.repo, self.repo_owner = parse_git_remote_info(repo_info)
 
         self.filenames = get_filenames(sh)
         self.diffs = ([diff for diff in get_files_changed(sh)],)
-        self.branch_name = (sh.branch_name,)
