@@ -26,6 +26,7 @@ class Creator:
         system_messages = self.create_system_message(include, jira)
         # examples_messages = self.create_example_message(code_data)
         user_messages = self.create_user_message(code, code_data)
+
         return system_messages + user_messages
 
     def create_user_message(self, code, code_data) -> list:
@@ -77,8 +78,7 @@ class Creator:
         return [
             {
                 "role": "user",
-                "content": f"Please provide a commit message for the provided code. Code: ```{sample.get('code')}```"
-                f'{f"Dont include a commit description. Provide just a commit title." if config.commit_description_max_words == 0 else ""}',
+                "content": f"Please provide a commit message for the provided code. Code: ```{sample.get('code')}```",
             },
             {"role": "assistant", "content": sample.get("message")},
         ]

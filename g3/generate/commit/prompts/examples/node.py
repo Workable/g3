@@ -1,3 +1,4 @@
+# flake8: noqa
 def node_sample():
     return {
         "message": "Handle cv-parser new error format SRC-1426",
