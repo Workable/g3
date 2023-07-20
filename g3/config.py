@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional
 
 CONFIG_DIR = ".g3"
-CONFIG_FILE = "config.ini"
+CONFIG_FILE = "config"
 
 
 class Config:
@@ -11,6 +11,9 @@ class Config:
         self.config_path = config_path / CONFIG_DIR
         self.config_file = self.config_path / CONFIG_FILE
         self.config = self.load_config()
+
+    def has_been_configured(self) -> bool:
+        return self.config.has_section("credentials")
 
     def get(self, section: str, key: str, default: Optional[str] = None) -> Optional[str]:
         try:
