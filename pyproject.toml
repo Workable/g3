@@ -22,6 +22,7 @@ python = "^3.11"
 typer = {extras = ["all"], version = "^0.9.0"}
 openai = "^0.27.8"
 asyncio = "^3.4.3"
+pygithub = "^1.59.0"
 
 
 [tool.poetry.group.lint.dependencies]
