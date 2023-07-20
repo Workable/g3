@@ -1,6 +1,6 @@
 import configparser
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 CONFIG_DIR = ".g3"
 CONFIG_FILE = "config"
@@ -14,16 +14,16 @@ class ConfigHandler:
         self.properties = self.load_properties()
 
     @property
-    def as_dict(self) -> dict[str, any]:
+    def as_dict(self) -> dict[str, Any]:
         return self.properties
 
     @property
     def github_token(self) -> str:
-        return self.properties.get("github_token")
+        return self.properties.get("github_token", "")
 
     @property
     def openai_key(self) -> str:
-        return self.properties.get("openai_key")
+        return self.properties.get("openai_key", "")
 
     @property
     def api_base(self) -> Optional[str]:
@@ -39,14 +39,14 @@ class ConfigHandler:
 
     @property
     def model(self) -> str:
-        return self.properties.get("model")
+        return self.properties.get("model", "gpt-4")
 
     @property
     def temperature(self) -> Optional[float]:
         if not self.properties.get("temperature"):
             return None
 
-        return float(self.properties.get("temperature"))
+        return float(self.properties.get("temperature", "0"))
 
     @property
     def api_version(self) -> Optional[str]:
@@ -78,10 +78,10 @@ class ConfigHandler:
         parser.read(self.config_file)
         return parser
 
-    def load_properties(self) -> dict[str, any]:
+    def load_properties(self) -> dict[str, Any]:
         properties = {}
         for section in self.config.sections():
-            for (key, value) in self.config.items(section):
+            for key, value in self.config.items(section):
                 properties[key] = value
 
         return properties

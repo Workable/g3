@@ -86,7 +86,7 @@ class Shell:
         input: Optional[str] = None,
         stdin: _HANDLE = None,
         stdout: _HANDLE = subprocess.PIPE,
-        exitcode: bool = False
+        exitcode: bool = False,
     ) -> _SHELL_RET:
         """
         Run a command specified by args, and return string representing
@@ -185,7 +185,7 @@ class Shell:
             logging.debug("Exit code: {}".format(returncode))
             return returncode == 0
         if returncode != 0:
-            raise RuntimeError("{} failed with exit code {}. Output was '{}'".format(" ".join(args), returncode, out))
+            raise RuntimeError(f"{args} failed with exit code {returncode}. Output was '{out.decode()}'")
 
         if stdout == subprocess.PIPE:
             return out.decode()  # do a strict decode for actual return

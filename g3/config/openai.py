@@ -1,6 +1,8 @@
 from typing import Optional
-from g3.utils.dictionary import without_nulls
+
 from pydantic import BaseSettings, Extra
+
+from g3.utils.dictionary import without_nulls
 
 
 class OpenAIConfig(BaseSettings):
@@ -18,12 +20,13 @@ class OpenAIConfig(BaseSettings):
 
     @property
     def args(self):
-        return without_nulls({
-            "model": self.model,
-            "temperature": self.temperature,
-            "deployment_id": self.deployment_id,
-        })
-
+        return without_nulls(
+            {
+                "model": self.model,
+                "temperature": self.temperature,
+                "deployment_id": self.deployment_id,
+            }
+        )
 
     @staticmethod
     def create():
@@ -36,5 +39,5 @@ class OpenAIConfig(BaseSettings):
             api_base=config.api_base,
             deployment_id=config.deployment_id,
             model=config.model,
-            temperature=config.temperature
+            temperature=config.temperature,
         )

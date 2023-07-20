@@ -1,26 +1,33 @@
-
-import inquirer
 import time
+
 import editor
+import inquirer
 from rich.progress import Progress, SpinnerColumn, TextColumn
+
 
 def display_selection(messages, type, field="message"):
     options = [
         "[Edit]",
         "[Regenerate]",
     ]
-    questions = [inquirer.List('selection',
-                                message=f"Choose a {type} {field}",
-                                choices=messages+options,
-                                )]
+    questions = [
+        inquirer.List(
+            "selection",
+            message=f"Choose a {type} {field}",
+            choices=messages + options,
+        )
+    ]
 
     selection = inquirer.prompt(questions)["selection"]
 
     if selection == "[Edit]":
-        questions = [inquirer.List('selection',
-                                message=f"Choose a {type} {field} to edit",
-                                choices=messages,
-                                )]
+        questions = [
+            inquirer.List(
+                "selection",
+                message=f"Choose a {type} {field} to edit",
+                choices=messages,
+            )
+        ]
         selection = inquirer.prompt(questions)["selection"]
         selection = editor.edit(contents=selection)
         print(selection.decode())
