@@ -24,13 +24,6 @@ def parse_git_remote_info(repo_info: str) -> List[str]:
         raise ValueError("Git protocol not supported")
 
 
-class ModelData(BaseModel):
-    filenames: List[str]
-    diffs: List[Diff]
-    repo_name: str
-    branch_name: str
-
-
 class GitInfo(BaseModel):
     repo_owner: Optional[str] = None
     repo_name: Optional[str] = None
