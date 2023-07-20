@@ -232,7 +232,12 @@ class Shell:
 
         return self._maybe_rstrip(self.sh(*(("git",) + args), **kwargs))
 
-   @property
-   def repo_name(self):
+    @property
+    def repo_name(self) -> str:
         """Return the name of the Git repository."""
         return os.path.basename(self.git("rev-parse", "--show-toplevel"))
+
+    @property
+    def branch_name(self) -> str:
+        """Return the name of the current Git branch."""
+        return self.git("rev-parse", "--abbrev-ref", "HEAD")

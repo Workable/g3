@@ -9,5 +9,5 @@ def test_shell():
 
     assert sh.is_git()
 
-    repo_name = sh.repo_name()
+    repo_name = sh.repo_name
     assert repo_name == "g3"
