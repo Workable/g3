@@ -1,6 +1,6 @@
 import os
 
-from g3.git.git import get_git_info
+from g3.git.git import GitInfo
 from g3.git.shell import Shell
 
 
@@ -15,7 +15,7 @@ def test_shell():
 
 
 def test_gitinfo():
-    info = get_git_info()
+    info = GitInfo()
 
     assert info.repo == "g3"
     assert info.repo_owner == "Workable"
