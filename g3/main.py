@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import Annotated
 
 import typer
@@ -8,15 +7,11 @@ from rich.prompt import FloatPrompt, Prompt
 from rich.text import Text
 
 from g3.config import config
+from g3.domain.message_tone import MessageTone
+from g3.generate.commit.messages.creator import Creator as CommitMessageCreator
+from g3.generate.pr.messages.creator import Creator as PRMessageCreator
 
 app = typer.Typer()
-
-
-class MessageTone(str, Enum):
-    PROFESSIONAL = "professional"
-    PERSONAL = "personal"
-    FRIENDLY = "friendly"
-    FUNNY = "funny"
 
 
 @app.callback()
@@ -54,7 +49,7 @@ def configure() -> None:
     openai_key = Prompt.ask("Your OpenAI key")
     config.set("credentials", "openai_key", openai_key)
 
-    openai_api_type = Prompt.ask("OpenAI API type", choices=["openai", "azure"], default="openai")
+    openai_api_type = Prompt.ask("OpenAI API type", choices=["open_ai", "azure"], default="open_ai")
     config.set("openai", "api_type", openai_api_type)
     if openai_api_type == "azure":
         openai_api_base = Prompt.ask("OpenAI API base")
@@ -81,7 +76,6 @@ def configure() -> None:
     config.set("message", "pr_description_max_words", pr_description_max_words)
 
     config.save_config()
-
     typer.echo(f"✅ Config file located at: {config.config_file}")
 
 
@@ -109,10 +103,17 @@ def commit(
     typer.echo(f"Generating commit message with {tone.value} tone.")
     if edit:
         typer.echo(f"For existing commit: {edit}")
+        raise NotImplementedError("The --edit option is not supported yet")
     if jira:
         typer.echo(f"Referencing Jira ticket: {jira}")
     if include:
         typer.echo(f"Including additional text:\n{include}")
+
+    CommitMessageCreator().create(
+        tone=tone,
+        jira=jira,
+        include=include,
+    )
 
 
 @app.command()
@@ -139,10 +140,17 @@ def pr(
     typer.echo(f"Generating PR description with {tone.value} tone.")
     if edit:
         typer.echo(f"For previous PR: {edit}")
+        raise NotImplementedError("The --edit option is not supported yet")
     if jira:
         typer.echo(f"Referencing Jira ticket: {jira}")
     if include:
         typer.echo(f"Including additional text:\n{include}")
+
+    PRMessageCreator().create(
+        tone=tone,
+        jira=jira,
+        include=include,
+    )
 
 
 if __name__ == "__main__":

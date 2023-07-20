@@ -7,7 +7,7 @@ from g3.utils.dictionary import without_nulls
 
 class OpenAIConfig(BaseSettings):
     api_key: str = ""
-    api_type: Optional[str] = "openai"
+    api_type: Optional[str] = "open_ai"
     api_version: Optional[str] = None
     api_base: Optional[str] = None
     deployment_id: Optional[str] = None
