@@ -35,7 +35,7 @@ def merge_dicts(x: Dict[K, V], y: Dict[K, V]) -> Dict[K, V]:
     return z
 
 
-class Shell(object):
+class Shell:
     """
     An object representing a shell (e.g., the bash prompt in your
     terminal), maintaining a concept of current working directory, and
@@ -232,6 +232,7 @@ class Shell(object):
 
         return self._maybe_rstrip(self.sh(*(("git",) + args), **kwargs))
 
-    def repo_name(self):  # noqa: F811
+   @property
+   def repo_name(self):
         """Return the name of the Git repository."""
         return os.path.basename(self.git("rev-parse", "--show-toplevel"))
