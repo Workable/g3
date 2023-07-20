@@ -2,15 +2,13 @@ from enum import Enum
 from typing import Annotated
 
 import typer
+from g3.config import config
 from rich import print
 from rich.panel import Panel
 from rich.prompt import FloatPrompt, Prompt
 from rich.text import Text
 
-from g3.config import Config
-
 app = typer.Typer()
-config = Config()
 
 
 class MessageTone(str, Enum):
