@@ -34,6 +34,10 @@ class GitInfo(BaseModel):
     diffs: Optional[List[Diff]] = None
 
     @property
+    def raw_diffs(self) -> str:
+        return "\n".join([diff.patch for diff in self.diffs or []])
+
+    @property
     def tokens_of_diffs(self) -> Optional[int]:
         if not self.diffs:
             return None
