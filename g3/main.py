@@ -2,6 +2,10 @@ from enum import Enum
 from typing import Annotated
 
 import typer
+from rich import print
+from rich.panel import Panel
+from rich.prompt import FloatPrompt, Prompt
+from rich.text import Text
 
 from g3.config import Config
 
@@ -22,41 +26,53 @@ def callback(ctx: typer.Context) -> None:
         return
 
     if not config.has_been_configured():
-        typer.echo("🚨 G3 has not been configured yet. Run `g3 configure` to get started.")
+        print(
+            Panel(
+                Text("g3 has not been configured yet. Run `g3 configure` to get started.", justify="center"),
+                title="🚨 Warning",
+                style="red bold",
+                padding=1,
+            )
+        )
         raise typer.Exit()
 
 
 @app.command()
 def configure() -> None:
     """Configure G3 tool by providing credentials and preferences"""
-    github_token = typer.prompt("GitHub token")
+    print(
+            Panel(
+                Text("Welcome to g3! Please provide the following information to get started. ", justify="center"),
+                title="👋 Hello there!",
+                style="blue bold",
+                padding=1,
+            )
+        )
+
+    github_token = Prompt.ask("Your GitHub token")
     config.set("credentials", "github_token", github_token)
 
-    openai_key = typer.prompt("OpenAI key")
+    openai_key = Prompt.ask("Your OpenAI key")
     config.set("credentials", "openai_key", openai_key)
 
-    openai_api_type = typer.prompt(
-        "OpenAI API type (openai|azure)", default=config.get("openai", "api_type", default="openai")
-    )
+    openai_api_type = Prompt.ask("OpenAI API type", choices=["openai", "azure"], default="openai")
     config.set("openai", "api_type", openai_api_type)
     if openai_api_type == "azure":
-        openai_api_base = typer.prompt("OpenAI API base")
+        openai_api_base = Prompt.ask("OpenAI API base")
         config.set("openai", "api_base", openai_api_base)
-        openai_deployment_id = typer.prompt("OpenAI deployment ID")
+        openai_deployment_id = Prompt.ask("OpenAI deployment ID")
         config.set("openai", "deployment_id", openai_deployment_id)
 
-    openai_model = typer.prompt("OpenAI model", default=config.get("openai", "model", default="gpt-4"))
+    openai_model = Prompt.ask("OpenAI model", default="gpt-4")
     config.set("openai", "model", openai_model)
 
-    openai_temperature = typer.prompt("OpenAI temperature", default=config.get("openai", "temperature", default="0"))
-    config.set("openai", "temperature", openai_temperature)
+    openai_temperature = FloatPrompt.ask("OpenAI temperature", default=0.0)
+    config.set("openai", "temperature", str(openai_temperature))
 
-    openai_api_version = typer.prompt(
-        "OpenAI API version", default=config.get("openai", "api_version", default="latest")
-    )
+    openai_api_version = Prompt.ask("OpenAI API version", default="latest")
     config.set("openai", "api_version", openai_api_version)
 
-    tone = typer.prompt("Default tone", default=config.get("message", "tone", default=MessageTone.FRIENDLY.value))
+    tone = Prompt.ask("Default tone", choices=[t.value for t in MessageTone], default=MessageTone.FRIENDLY.value)
     config.set("message", "tone", tone)
 
     config.save_config()
