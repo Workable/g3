@@ -1,5 +1,8 @@
 name: Push project build to JFrog Artifactory
 
+env:
+  ARTIFACTORY_PATH: "https://workable.jfrog.io/workable/pypi/pypi-local/g3"
+
 on:
   push:
     branches:
@@ -19,7 +22,7 @@ jobs:
       # This action sets up the JFrog CLI with the Artifactory URL and access token
       - uses: jfrog/setup-jfrog-cli@v3
         env:
-          JF_URL: ${{ secrets.JFROG_URL }}
+          JF_URL: ${{ env.ARTIFACTORY_PATH }}
           JF_ARTIFACTORY_KEY: ${{ secrets.JFROG_DEV_ROBOT_API_KEY }}
 
       - uses: actions/setup-python@v4
