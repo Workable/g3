@@ -23,9 +23,10 @@ jobs:
 
       - name: Install poetry and build the project
         run: |
-          git describe --tags
           pip install poetry
-          poetry install
+          git fetch --all --tags
+          latesttag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          git checkout ${latesttag}
           make deploy
         env:
           ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
