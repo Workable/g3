@@ -1,3 +1,4 @@
+# flake8: noqa
 def ruby_sample() -> dict:
     return {
         "message": "Send account.linkedin_id as LI apply connect account identifier, skip if blank",

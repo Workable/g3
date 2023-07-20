@@ -1,3 +1,4 @@
+# flake8: noqa
 def python_sample():
     return {
         "message": "Refactor Updaters to always return dict for changes",
