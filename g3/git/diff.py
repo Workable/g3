@@ -1,11 +1,11 @@
-from dataclasses import dataclass
 from typing import Generator, List
+
+from pydantic import BaseModel
 
 from g3.git.shell import Shell
 
 
-@dataclass
-class Diff:
+class Diff(BaseModel):
     filename: str
     patch: str
 
