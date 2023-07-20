@@ -5,6 +5,7 @@ env:
   ARTIFACTORY_API_KEY: ${{ secrets.JFROG_DEV_ROBOT_API_KEY }}
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
