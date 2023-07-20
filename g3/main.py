@@ -74,6 +74,12 @@ def configure() -> None:
     tone = Prompt.ask("Default tone", choices=[t.value for t in MessageTone], default=MessageTone.FRIENDLY.value)
     config.set("message", "tone", tone)
 
+    commit_description_max_words = Prompt.ask("Commit description max words", default=50)
+    config.set("message", "commit_description_max_words", commit_description_max_words)
+
+    pr_description_max_words = Prompt.ask("PR description max words", default=500)
+    config.set("message", "pr_description_max_words", pr_description_max_words)
+
     config.save_config()
 
     typer.echo(f"✅ Config file located at: {config.config_file}")
