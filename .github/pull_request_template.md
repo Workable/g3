@@ -14,4 +14,4 @@ _{Please add a screenshot here}_
 
 ## ℹ️ Issue
 
-Closes #1
+Closes issue \#1
