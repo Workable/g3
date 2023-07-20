@@ -27,5 +27,5 @@ jobs:
           poetry install
           make deploy
         env:
-          ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
+          ARTIFACTORY_USERNAME: $JFROG_USER
           ARTIFACTORY_API_KEY: ${{ secrets.JFROG_API_KEY}}
