@@ -23,6 +23,7 @@ jobs:
 
       - name: Install poetry and build the project
         run: |
+          git describe --tags
           pip install poetry
           poetry install
           make deploy
