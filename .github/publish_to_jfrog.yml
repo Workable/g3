@@ -19,23 +19,29 @@ jobs:
       # This action sets up the JFrog CLI with the Artifactory URL and access token
       - uses: jfrog/setup-jfrog-cli@v3
         env:
+          JF_URL: ${{ secrets.JFROG_URL }}
           JF_ARTIFACTORY_KEY: ${{ secrets.JFROG_DEV_ROBOT_API_KEY }}
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install poetry and build the project
+        run: |
+          pip install poetry
+          poetry install
+          poetry build
 
       # This action creates a new test file and uploads it to Artifactory
       - name: Push Build to Artifactory
         run: |
-          export BUILD_NAME="g3"
-          export BUILD_MODULE="main"
-          export BUILD_NUMBER="1"
+          export $BUILD_NUMBER=${{ github.ref_name }}
+          jf rt upload "/dist/*" --build-number $BUILD_NUMBER
 
-          # export PATH_TO_DIRECTORY="name/version/dates"
+      # # This action publishes the build information to Artifactory, and retains the latest 10 builds
+      # - name: Build to Artifactory
+      #   run: |
+      #     jfrog rt u g "g3/g3$BUILD_NUMBER"
+      #     jf rt build-publish $BUILD_NUMBER
 
-          jf rt upload "test.txt" g --build-name $BUILD_NAME --build-number $BUILD_NUMBER --module $BUILD_MODULE
-
-      # This action publishes the build information to Artifactory, and retains the latest 10 builds
-      - name: Build to Artifactory
-        run: |
-          jfrog rt u g g3/g3
-          jf rt build-publish $BUILD_NAME $BUILD_NUMBER
-
-          jf rt bdi c --max-builds=10
+      #     jf rt bdi c --max-builds=10
