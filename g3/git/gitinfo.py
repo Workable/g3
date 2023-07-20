@@ -58,4 +58,4 @@ class GitInfo(BaseModel):
         self.repo, self.repo_owner = parse_git_remote_info(repo_info)
 
         self.filenames = get_filenames(sh)
-        self.diffs = ([diff for diff in get_files_changed(sh)],)
+        self.diffs = [diff for diff in get_files_changed(sh)]

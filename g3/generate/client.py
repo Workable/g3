@@ -9,11 +9,11 @@ class OpenAI:
     def __init__(self):
         openai.api_key = config.api_key
         if config.api_type:
-            openai.api_key = config.api_type
+            openai.api_type = config.api_type
         if config.api_base:
-            openai.api_key = config.api_base
+            openai.api_base = config.api_base
         if config.api_version:
-            openai.api_key = config.api_version
+            openai.api_version = config.api_version
 
     def generate(self, prompt: List[Dict] | str, **kwargs: Any) -> str:
         kwargs = config.args | kwargs

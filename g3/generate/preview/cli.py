@@ -7,7 +7,7 @@ from rich.markdown import Markdown
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
 
-def display_selection(message, type, field="message"):
+def display_selection(message, type, field="message") -> str:
     options = [
         "Submit",
         "Edit",

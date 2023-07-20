@@ -20,8 +20,8 @@ class Creator:
         self.python_sample = python_sample
         self.git_info = GitInfo()
 
-    def create(self, jira: Optional[str] = None, include: Optional[str] = None) -> list:
-        system_messages = self.create_system_messages(jira, include)
+    def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
+        system_messages = self.create_system_messages(tone, jira, include)
 
         # return system_messages + self.examples_messages + self.user_messages
         return system_messages + self.user_messages
@@ -29,7 +29,7 @@ class Creator:
     @property
     def user_messages(self) -> list:
         content = f"""
- Please provide a commit message for the provided code. Code: ```{self.git_info.raw_diffs()}```.
+ Please provide a commit message for the provided code. Code: ```{self.git_info.raw_diffs}```.
  The code is from a git branch named {self.git_info.branch}.
  The code is from a git repository named {self.git_info.repo}.
  The code contains changes in the following files: {self.git_info.filenames}."""
@@ -41,7 +41,9 @@ class Creator:
             }
         ]
 
-    def create_system_messages(self, jira: Optional[str] = None, include: Optional[str] = None) -> list:
+    def create_system_messages(
+        self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None
+    ) -> list:
         content = f"""You are a helpful assistant creating commit titles and commit descriptions for git commits in a
  software engineering team based on their stashed git changes which will be provided to you. We defined a good commit
  title as one that explains what was changed. The commit description if asked should contain what was changed and why
@@ -52,7 +54,7 @@ class Creator:
  start with a verb. Whatever follows should be the commit title that you suggest. The commit description if asked,
  should be a few bullets which will contain short descriptions about the changes using at most
  {config.commit_description_max_words} words. If the words provided are 0 then you should not include a commit
- description. Use the following tone when creating the commit message: {config.tone}."""
+ description. Use the following tone when creating the commit message: {tone.value}."""
         if include:
             content += f" Include in your response the following: ```{include}```."
         if jira:
