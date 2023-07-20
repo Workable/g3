@@ -47,7 +47,8 @@ jobs:
         run: |
           pip install poetry
           poetry self add poetry-version-plugin
-          git tag main
+          shashort=git rev-parse --short HEAD
+          git tag main_${shashort}
           make deploy
 
       - name: Install poetry, build, and publish via custom branch
