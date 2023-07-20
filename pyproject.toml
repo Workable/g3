@@ -51,3 +51,6 @@ profile = "black"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry-version-plugin]
+source = "git-tag"
