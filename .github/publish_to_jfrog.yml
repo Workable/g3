@@ -1,14 +1,11 @@
 name: Push project build to JFrog Artifactory
 
-env:
-  ARTIFACTORY_PATH: "https://workable.jfrog.io/workable/pypi/pypi-local/g3"
-
 on:
   push:
     branches:
       - main
   tags:
-      - '*pre'
+    - "*pre"
 
 jobs:
   build:
@@ -19,12 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # This action sets up the JFrog CLI with the Artifactory URL and access token
-      - uses: jfrog/setup-jfrog-cli@v3
-        env:
-          JF_URL: ${{ env.ARTIFACTORY_PATH }}
-          JF_ARTIFACTORY_KEY: ${{ secrets.JFROG_DEV_ROBOT_API_KEY }}
-
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -33,18 +24,4 @@ jobs:
         run: |
           pip install poetry
           poetry install
-          poetry build
-
-      # This action creates a new test file and uploads it to Artifactory
-      - name: Push Build to Artifactory
-        run: |
-          export $BUILD_NUMBER=${{ github.ref_name }}
-          jf rt upload "/dist/*" --build-number $BUILD_NUMBER
-
-      # # This action publishes the build information to Artifactory, and retains the latest 10 builds
-      # - name: Build to Artifactory
-      #   run: |
-      #     jfrog rt u g "g3/g3$BUILD_NUMBER"
-      #     jf rt build-publish $BUILD_NUMBER
-
-      #     jf rt bdi c --max-builds=10
+          make deploy
