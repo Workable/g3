@@ -56,6 +56,14 @@ class ConfigHandler:
     def tone(self) -> Optional[str]:
         return self.properties.get("tone")
 
+    @property
+    def commit_description_max_words(self) -> int:
+        return int(self.properties.get("commit_description_max_words", "50"))
+
+    @property
+    def pr_description_max_words(self) -> int:
+        return int(self.properties.get("pr_description_max_words", "500"))
+
     def has_been_configured(self) -> bool:
         return self.config.has_section("credentials")
 
