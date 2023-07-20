@@ -36,10 +36,13 @@ test-coverage-fail:
 	@pytest --cov=g3 --cov-report=term-missing --cov-report=html --cov-fail-under=80
 
 # Deployment
+clean:
+	@rm -rf ./dist
+
 build:
 	@poetry build
 
 publish:
-	@poetry publish -r jfrog -u=$ARTIFACTORY_USERNAME -p=$ARTIFACTORY_API_KEY
+	@poetry publish --repository jfrog --username $(ARTIFACTORY_USERNAME) --password $(ARTIFACTORY_API_KEY)
 
-deploy: build publish
+deploy: clean build publish
