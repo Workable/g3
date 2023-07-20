@@ -1,6 +1,11 @@
 name: Push project build to JFrog Artifactory
 
+env:
+  ARTIFACTORY_USERNAME: ${{ vars.JFROG_DEV_ROBOT_USER }}
+  ARTIFACTORY_API_KEY: ${{ secrets.JFROG_DEV_ROBOT_API_KEY }}
+
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -18,7 +23,7 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install poetry and build the project
         run: |
