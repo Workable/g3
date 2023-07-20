@@ -35,6 +35,9 @@ class GitInfo(BaseModel):
     repo_owner: Optional[str] = None
     repo_name: Optional[str] = None
     branch: Optional[str] = None
+    filenames: Optional[List[str]] = None
+    diffs: Optional[List[Diff]] = None
+    branch_name: Optional[str] = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -48,13 +51,6 @@ class GitInfo(BaseModel):
         repo_info = sh.git("config", "--get", "remote.origin.url")
         self.repo_name, self.repo_owner = parse_git_remote_info(repo_info)
 
-    def get_data_for_model(self) -> ModelData:
-        sh = Shell()
-        assert sh.is_git()
-
-        return ModelData(
-            filenames=get_filenames(sh),
-            diffs=[diff for diff in get_files_changed(sh)],
-            repo_name=sh.repo_name,
-            branch_name=sh.branch_name,
-        )
+        self.filenames = get_filenames(sh)
+        self.diffs = ([diff for diff in get_files_changed(sh)],)
+        self.branch_name = (sh.branch_name,)

@@ -13,7 +13,6 @@ def test_get_files_changed():
     from g3.git.git import GitInfo
     from g3.git.shell import Shell
 
-    git_info = GitInfo()
     sh = Shell()
 
     # Create temporary file in this directory and add it to the git index
@@ -21,7 +20,8 @@ def test_get_files_changed():
         f.write("hello world")
 
     sh.git("add", "test.txt")
-    assert "test.txt" in git_info.get_data_for_model().filenames
+    git_info = GitInfo()
+    assert "test.txt" in git_info.filenames
 
     sh.git("rm", "--cached", "test.txt")
     os.remove("test.txt")
