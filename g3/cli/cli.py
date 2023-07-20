@@ -1,10 +1,8 @@
 
-import typer
 import inquirer
 import time
 import editor
 from rich.progress import Progress, SpinnerColumn, TextColumn
-app = typer.Typer()
 
 def display_selection(messages, type, field="message"):
     options = [
@@ -37,6 +35,3 @@ def display_selection(messages, type, field="message"):
         # Placeholder for AI
 
     return selection
-
-display_selection(["Adds ...", "This PR"],"PR", "Title")
-display_selection(["refactors something", "adds ..."], "commit")
