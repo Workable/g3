@@ -1,12 +1,11 @@
-import os
 import re
+from typing import Optional
 
-import openai
-
-from g3.generate.prompts.commit.examples.node import node_sample
-from g3.generate.prompts.commit.examples.python import python_sample
-from g3.generate.prompts.commit.examples.ruby import ruby_sample
-from g3.git.data import get_data_for_model as git
+from g3.domain.message_tone import MessageTone
+from g3.generate.commit.prompts.examples.node import node_sample
+from g3.generate.commit.prompts.examples.python import python_sample
+from g3.generate.commit.prompts.examples.ruby import ruby_sample
+from g3.git.gitinfo import GitInfo
 from g3.main import config
 
 PY_PATTERN = re.compile(".*py")
@@ -19,59 +18,53 @@ class Creator:
         self.ruby_sample = ruby_sample
         self.node_sample = node_sample
         self.python_sample = python_sample
-        openai.api_key = os.environ.get("OPENAI_API_KEY")
+        self.git_info = GitInfo()
 
-    def create(self, code, jira: str, include: str) -> list:
-        code_data = git()
-        system_messages = self.create_system_message(include, jira)
-        # examples_messages = self.create_example_message(code_data)
-        user_messages = self.create_user_message(code, code_data)
+    def create(self, jira: Optional[str] = None, include: Optional[str] = None) -> list:
+        system_messages = self.create_system_messages(jira, include)
 
-        return system_messages + user_messages
+        # return system_messages + self.examples_messages + self.user_messages
+        return system_messages + self.user_messages
 
-    def create_user_message(self, code, code_data) -> list:
+    @property
+    def user_messages(self) -> list:
+        content = f"""
+ Please provide a commit message for the provided code. Code: ```{self.git_info.raw_diffs()}```.
+ The code is from a git branch named {self.git_info.branch}.
+ The code is from a git repository named {self.git_info.repo}.
+ The code contains changes in the following files: {self.git_info.filenames}."""
+
         return [
             {
                 "role": "user",
-                "content": f"Please provide a commit message for the provided code. Code: ```{code}```."
-                f"The code is from a git branch named {code_data.branch_name}. "
-                f"The code is from a git repository named {code_data.repo_name}. "
-                f"The code contains changes in the following files: {code_data.filenames}. ",
+                "content": content.replace("\n", ""),
             }
         ]
 
-    def create_system_message(self, include, jira) -> list:
-        return [
-            {
-                "role": "system",
-                "content": "You are a helpful assistant creating commit titles and commit descriptions for git commits "
-                "in a software engineering team based on their stashed git changes which will be provided to you."
-                "We defined a good commit title as one that explains what was changed."
-                "The commit description if asked should contain what was changed and why the change was made."
-                "Don't include the provided code in your response. "
-                "Also, dont include in the response the words commit title, or commit description. The response "
-                "will be directly used by git commit command. "
-                "The goal for the commit title is to briefly complete a sentence which starts like 'This commit "
-                "if applied will:' but dont include this sentence in your response. "
-                "Be brief on your response about the commit title using less than 80 characters, use imperative"
-                " and start with a verb. "
-                "Whatever follows should be the commit title that you suggest. "
-                "The commit description if asked, should be a few bullets which will contain short "
-                "descriptions about the"
-                f" changes using at most {config.commit_description_max_words} words. If the words "
-                f"provided are"
-                f"0 then you should not include a commit description."
-                f'{f"Include in your response the following: {include} ."}'
-                f'{f"Incorporate the following Jira ticket: {jira} ."}'
-                f"Use the following tone when creating the commit message: {config.tone}. "
-                "Your response should be in markdown format and you should split each sentence to a "
-                "new line.",
-            }
-        ]
+    def create_system_messages(self, jira: Optional[str] = None, include: Optional[str] = None) -> list:
+        content = f"""You are a helpful assistant creating commit titles and commit descriptions for git commits in a
+ software engineering team based on their stashed git changes which will be provided to you. We defined a good commit
+ title as one that explains what was changed. The commit description if asked should contain what was changed and why
+ the change was made. Don't include the provided code in your response. Also, dont include in the response the words
+ commit title, or commit description. The response will be directly used by git commit command. The goal for the commit
+ title is to briefly complete a sentence which starts like 'This commit if applied will:' but dont include this sentence
+ in your response. Be brief on your response about the commit title using less than 80 characters, use imperative and
+ start with a verb. Whatever follows should be the commit title that you suggest. The commit description if asked,
+ should be a few bullets which will contain short descriptions about the changes using at most
+ {config.commit_description_max_words} words. If the words provided are 0 then you should not include a commit
+ description. Use the following tone when creating the commit message: {config.tone}."""
+        if include:
+            content += f" Include in your response the following: ```{include}```."
+        if jira:
+            content += f" Incorporate the following Jira ticket: ```{jira}```."
+        content += " Your response should be in markdown format and you should split each sentence to a new line."
 
-    def create_example_message(self, code_data) -> list:
-        code_stack = self.get_code_stack(code_data)
-        sample = self.set_sample(code_stack)
+        return [{"role": "system", "content": content.replace("\n", "")}]
+
+    @property
+    def example_messages(self) -> list:
+        tech_stack = self.find_tech_stack()
+        sample = self.get_sample(tech_stack)
         if not sample:
             return []
 
@@ -83,10 +76,11 @@ class Creator:
             {"role": "assistant", "content": sample.get("message")},
         ]
 
-    def get_code_stack(self, code_data) -> str:
-        py_sum = sum(1 for x in code_data.filenames if PY_PATTERN.match(x))
-        js_sum = sum(1 for x in code_data.filenames if JS_PATTERN.match(x))
-        rb_sum = sum(1 for x in code_data.filenames if RB_PATTERN.match(x))
+    def find_tech_stack(self) -> str:
+        py_sum = sum(1 for x in self.git_info.filenames if PY_PATTERN.match(x))
+        js_sum = sum(1 for x in self.git_info.filenames if JS_PATTERN.match(x))
+        rb_sum = sum(1 for x in self.git_info.filenames if RB_PATTERN.match(x))
+
         return self.most_files(py_sum, js_sum, rb_sum)
 
     def most_files(self, py_sum, js_sum, rb_sum):
@@ -99,7 +93,7 @@ class Creator:
                 max_value, name = js_sum, "node"
         return name
 
-    def set_sample(self, stack: str) -> dict | None:
+    def get_sample(self, stack: str) -> dict | None:
         if stack == "ruby":
             return self.ruby_sample
         elif stack == "node":
