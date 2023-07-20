@@ -9,7 +9,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 def display_selection(message, type, field="message"):
     options = [
-        "Accept",
+        "Submit",
         "Edit",
         "Regenerate",
     ]
@@ -31,8 +31,7 @@ def display_selection(message, type, field="message"):
     selection = inquirer.prompt(questions)["selection"]
 
     if selection == "Edit":
-        message = editor.edit(contents=message)
-        print(message.decode())
+        message = editor.edit(contents=message).decode()
     elif selection == "Regenerate":
         with Progress(
             SpinnerColumn(),
