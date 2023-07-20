@@ -3,7 +3,8 @@ from pathlib import Path
 
 from faker import Faker
 
-from g3.config import CONFIG_DIR, CONFIG_FILE, Config
+from g3.config.handler import CONFIG_DIR, CONFIG_FILE
+from g3.config.handler import ConfigHandler as Config
 from g3.main import MessageTone
 
 fake = Faker()

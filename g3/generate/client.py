@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 
 import openai
+
 from g3.config import openai_config as config
 
 
@@ -14,20 +15,20 @@ class OpenAI:
         if config.api_version:
             openai.api_key = config.api_version
 
-    def generate(self, message: str, **kwargs: Any) -> str:
+    def generate(self, prompt: List[Dict] | str, **kwargs: Any) -> str:
         kwargs = config.args | kwargs
         resp = openai.Completion.create(
-            prompt=message,
+            prompt=prompt,
             **kwargs,
         )
         return resp["choices"][0]["text"]
 
 
 class OpenAIChat(OpenAI):
-    def generate(self, message: List[Dict], **kwargs: Any) -> str:
+    def generate(self, prompt: List[Dict] | str, **kwargs: Any) -> str:
         kwargs = config.args | kwargs
         resp = openai.ChatCompletion.create(
-            messages=message,
+            messages=prompt,
             **kwargs,
         )
         return resp["choices"][0]["message"]["content"]

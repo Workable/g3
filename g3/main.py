@@ -2,11 +2,12 @@ from enum import Enum
 from typing import Annotated
 
 import typer
-from g3.config import config
 from rich import print
 from rich.panel import Panel
 from rich.prompt import FloatPrompt, Prompt
 from rich.text import Text
+
+from g3.config import config
 
 app = typer.Typer()
 
@@ -39,13 +40,13 @@ def callback(ctx: typer.Context) -> None:
 def configure() -> None:
     """Configure G3 tool by providing credentials and preferences"""
     print(
-            Panel(
-                Text("Welcome to g3! Please provide the following information to get started. ", justify="center"),
-                title="👋 Hello there!",
-                style="blue bold",
-                padding=1,
-            )
+        Panel(
+            Text("Welcome to g3! Please provide the following information to get started. ", justify="center"),
+            title="👋 Hello there!",
+            style="blue bold",
+            padding=1,
         )
+    )
 
     github_token = Prompt.ask("Your GitHub token")
     config.set("credentials", "github_token", github_token)
