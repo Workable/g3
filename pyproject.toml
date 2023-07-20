@@ -5,6 +5,15 @@ description = "An AI-powered CLI tool to help you write better commit messages a
 authors = ["Ioannis Karachristos <ioannis@workable.com>", "Kostis Kyrkos <konstantinos.kyrkos@workable.com>"]
 readme = "README.md"
 
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "jfrog"
+url = "https://workable.jfrog.io/workable/api/pypi/pypi-virtual"
+priority = "supplemental"
+
 [tool.poetry.scripts]
 g3 = "g3.main:app"
 
