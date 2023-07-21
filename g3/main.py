@@ -1,3 +1,4 @@
+import signal
 from typing import Annotated
 
 import typer
@@ -10,6 +11,14 @@ from g3.config import config
 from g3.domain.message_tone import MessageTone
 from g3.generate.commit.messages.creator import Creator as CommitMessageCreator
 from g3.generate.pr.messages.creator import Creator as PRMessageCreator
+
+
+def signal_handler(sig, frame):
+    print("Ctrl+C pressed. Exiting...")
+    exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
 
 app = typer.Typer()
 
