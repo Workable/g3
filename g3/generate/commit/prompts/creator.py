@@ -10,6 +10,7 @@ from g3.main import config
 
 PY_PATTERN = re.compile(".*py")
 JS_PATTERN = re.compile(".*js")
+TS_PATTERN = re.compile(".*ts")
 RB_PATTERN = re.compile(".*rb")
 
 
@@ -80,7 +81,7 @@ class Creator:
 
     def find_tech_stack(self) -> str:
         py_sum = sum(1 for x in self.git_info.filenames if PY_PATTERN.match(x))
-        js_sum = sum(1 for x in self.git_info.filenames if JS_PATTERN.match(x))
+        js_sum = sum(1 for x in self.git_info.filenames if JS_PATTERN.match(x) or TS_PATTERN.match(x))
         rb_sum = sum(1 for x in self.git_info.filenames if RB_PATTERN.match(x))
 
         return self.most_files(py_sum, js_sum, rb_sum)
@@ -91,8 +92,7 @@ class Creator:
             max_value, name = js_sum, "node"
         if rb_sum > max_value:
             max_value, name = rb_sum, "ruby"
-            if js_sum > rb_sum:
-                max_value, name = js_sum, "node"
+
         return name
 
     def get_sample(self, stack: str) -> dict | None:
