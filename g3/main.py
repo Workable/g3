@@ -11,7 +11,7 @@ from g3.domain.message_tone import MessageTone
 from g3.generate.commit.messages.creator import Creator as CommitMessageCreator
 from g3.generate.pr.messages.creator import Creator as PRMessageCreator
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 @app.callback()
