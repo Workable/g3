@@ -20,20 +20,20 @@ class Creator:
     def create(self, tone: MessageTone, jira=None, include=None) -> None:
         prompt = self.prompt_creator.create(tone, jira, include)
 
-        message = self.openai.generate(prompt)
+        stream = self.openai.generate(prompt)
         if self.commit:
             original_message = self.commit.commit.message
-            reviewed_message, retry = Presenter.present_comparison(original_message, message, "commit")
+            reviewed_message, retry = Presenter.present_comparison(original_message, stream, "commit")
             while retry:
-                message = self.openai.generate(prompt)
-                reviewed_message, retry = Presenter.present_comparison(original_message, message, "commit")
+                stream = self.openai.generate(prompt)
+                reviewed_message, retry = Presenter.present_comparison(original_message, stream, "commit")
 
             pyperclip.copy(reviewed_message)
             print("✅ Generated message has been copied to clipboard.")
         else:
-            reviewed_message, retry = Presenter.present(message, "commit")
+            reviewed_message, retry = Presenter.present(stream, "commit")
             while retry:
-                message = self.openai.generate(prompt)
-                reviewed_message, retry = Presenter.present(message, "commit")
+                stream = self.openai.generate(prompt)
+                reviewed_message, retry = Presenter.present(stream, "commit")
 
             commit(reviewed_message)
