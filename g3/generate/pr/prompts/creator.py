@@ -2,14 +2,17 @@ from typing import Optional
 
 from g3.domain.message_tone import MessageTone
 from g3.generate.pr.prompts.template import pr_template
+from g3.git.client import get_commit_messages
 from g3.git.gitinfo import GitInfo
+from g3.github.github_info import GithubInfo
 from g3.main import config
 
 
 class Creator:
     def __init__(self):
         self.git_info = GitInfo()
-        self.commit_messages: list[str] = self.git_info.commit_messages("main")
+        self.github_info = GithubInfo()
+        self.commit_messages: list[str] = get_commit_messages(self.github_info.default_branch)
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         system_messages = self.create_system_messages(tone, jira, include)
