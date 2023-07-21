@@ -13,7 +13,7 @@ def commit(message: str) -> None:
     sh.git("commit", "-m", message)
 
 
-def get_commit_messages(origin_branch) -> List[str]:
+def get_commit_messages(origin_branch: str) -> List[str]:
     """
     Get the commits between two branches.
 
