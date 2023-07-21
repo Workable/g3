@@ -8,3 +8,27 @@ g3 configure
 
 You will be asked to enter your Github token and open-ai key and some information about the commit and pr the tool will
 generate for you.
+
+## Usage
+
+### Commit
+
+```bash
+g3 commit
+```
+
+#### Options:
+- t: The tone used
+- j: The jira ticket(s) referenced
+- i: Include a phrase you want
+
+### PR
+
+```bash
+g3 pr
+```
+
+#### Options:
+- t: The tone used
+- j: The jira ticket(s) referenced
+- i: Include a phrase you want
