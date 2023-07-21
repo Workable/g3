@@ -45,6 +45,9 @@ faker = "^19.1.0"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"
 
+[tool.mypy]
+ignore_missing_imports = true
+
 [tool.black]
 line-length = 120
 
