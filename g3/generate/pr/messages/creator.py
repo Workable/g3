@@ -21,13 +21,13 @@ class Creator:
             for commit in self.pr.get_commits():
                 commit_messages.append(commit.commit.message)
             prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
-            stream = self.openai.generate(prompt)
+            stream = self.openai.stream(prompt)
 
             original_message = f"{self.pr.title}\n\n{self.pr.body}"
 
             reviewed_message, retry = Presenter.present_comparison(original_message, stream, "pr")
             while retry:
-                stream = self.openai.generate(prompt)
+                stream = self.openai.stream(prompt)
                 reviewed_message, retry = Presenter.present_comparison(original_message, stream, "pr")
 
             title = reviewed_message.partition("\n")[0]
@@ -37,11 +37,11 @@ class Creator:
         else:
             commit_messages = get_commit_messages("main")
             prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
-            stream = self.openai.generate(prompt)
+            stream = self.openai.stream(prompt)
 
             reviewed_message, retry = Presenter.present(stream, "pr")
             while retry:
-                stream = self.openai.generate(prompt)
+                stream = self.openai.stream(prompt)
                 reviewed_message, retry = Presenter.present(stream, "pr")
 
             title = reviewed_message.split("\n")[1]
