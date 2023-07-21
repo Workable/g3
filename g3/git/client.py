@@ -31,3 +31,18 @@ def get_commit_messages(origin_branch: str) -> List[str]:
         res.append(sh.git("show", "-s", "--format=%B", cm))
 
     return res
+
+
+def push(remote: str, branch: str, force: bool = False) -> None:
+    """
+    Push the current branch to the remote.
+    """
+    sh = Shell()
+    assert sh.is_git()
+
+    branch = sh.branch_name if not branch else branch
+
+    if force:
+        sh.git("push", remote, "--force", branch)
+    else:
+        sh.git("push", remote, branch)
