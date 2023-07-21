@@ -1,4 +1,4 @@
-name: Push project build to JFrog Artifactory
+name: Run tests
 
 env:
   ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
