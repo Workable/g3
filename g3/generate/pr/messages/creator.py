@@ -22,5 +22,5 @@ class Creator:
 
         title = reviewed_message.split("\n")[1]
         description = reviewed_message.split(title)[1]
-        pr = self.gh.open_pull_request(title, description)
+        pr = self.gh.create_pull_request(title, description)
         print(f"Opened PR: {pr.html_url}")
