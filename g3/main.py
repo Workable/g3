@@ -23,7 +23,6 @@ signal.signal(signal.SIGINT, signal_handler)
 app = typer.Typer(pretty_exceptions_enable=False)
 
 
-
 @app.callback()
 def callback(ctx: typer.Context) -> None:
     if ctx.invoked_subcommand == "configure":

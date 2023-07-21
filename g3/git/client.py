@@ -17,7 +17,6 @@ def get_commit_messages(origin_branch: str) -> List[str]:
     """
     Get the commits between two branches.
 
-    :param base_branch: The base branch.
     :param origin_branch: The origin branch.
     """
     res = []
