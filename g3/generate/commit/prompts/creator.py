@@ -1,6 +1,8 @@
 import re
 from typing import Optional
 
+from github.Commit import Commit
+
 from g3.domain.message_tone import MessageTone
 from g3.generate.commit.prompts.examples.node import node_sample
 from g3.generate.commit.prompts.examples.python import python_sample
@@ -15,11 +17,11 @@ RB_PATTERN = re.compile(".*rb")
 
 
 class Creator:
-    def __init__(self):
+    def __init__(self, commit: Optional[Commit] = None):
         self.ruby_sample = ruby_sample
         self.node_sample = node_sample
         self.python_sample = python_sample
-        self.git_info = GitInfo()
+        self.git_info = GitInfo(commit=commit)
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         system_messages = self.create_system_messages(tone, jira, include)

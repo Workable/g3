@@ -26,6 +26,7 @@ inquirer = "^3.1.3"
 pydantic = {version = "^v1.10.10", extras = ["dotenv"]}
 tiktoken = "^0.4.0"
 pygithub = "^1.59.0"
+pyperclip = "^1.8.2"
 
 
 [tool.poetry.group.lint.dependencies]

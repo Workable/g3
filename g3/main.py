@@ -79,10 +79,10 @@ def configure() -> None:
     tone = Prompt.ask("Default tone", choices=[t.value for t in MessageTone], default=MessageTone.FRIENDLY.value)
     config.set("message", "tone", tone)
 
-    commit_description_max_words = Prompt.ask("Commit description max words", default=50)
+    commit_description_max_words = Prompt.ask("Commit description max words", default="50")
     config.set("message", "commit_description_max_words", commit_description_max_words)
 
-    pr_description_max_words = Prompt.ask("PR description max words", default=500)
+    pr_description_max_words = Prompt.ask("PR description max words", default="500")
     config.set("message", "pr_description_max_words", pr_description_max_words)
 
     config.save_config()
@@ -113,13 +113,12 @@ def commit(
     typer.echo(f"Generating commit message with {tone.value} tone..")
     if edit:
         typer.echo(f"For existing commit: {edit}")
-        raise NotImplementedError("The --edit option is not supported yet")
     if jira:
         typer.echo(f"Referencing Jira ticket: {jira}")
     if include:
         typer.echo(f"Including additional text:\n{include}")
 
-    CommitMessageCreator().create(
+    CommitMessageCreator(commit_hash=edit).create(
         tone=tone,
         jira=jira,
         include=include,
