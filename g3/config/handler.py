@@ -116,4 +116,4 @@ class Defaults:
         self.pr_description_max_words = self.set_defaults(file_config.pr_description_max_words, 500)
 
     def set_defaults(self, value, default=None):
-        return value if value else default
+        return value if value is not None else default
