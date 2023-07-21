@@ -20,7 +20,7 @@ class Creator:
             stream = self.openai.stream(prompt)
             reviewed_message, retry = Presenter.present(stream, "commit")
 
-        title = reviewed_message.partition("\n")[0]
-        description = reviewed_message.split("\n", 1)[1]
+        title = reviewed_message.partition("\n")[1]
+        description = reviewed_message.split("\n", 2)[1]
         pr = self.gh.open_pull_request(title, description)
         print(f"Opened PR: {pr.html_url}")
