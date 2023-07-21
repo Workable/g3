@@ -10,9 +10,11 @@ on:
       branch_to_build:
         description: 'Specify the branch you want to build'
         required: false
+        default: $GITHUB_REF
       version_to_build:
-        description: 'Specify the version you want to build'
+        description: 'Specify the version you want to build: use SEMVER format only'
         required: false
+        default: "0.0.0.dev"
   push:
     branches:
       - main
@@ -40,15 +42,6 @@ jobs:
           git fetch --all --tags
           latesttag=$(git describe --tags $(git rev-list --tags --max-count=1))
           git checkout ${latesttag}
-          make deploy
-      
-      - name: Install poetry, build, and publish via the main branch
-        if: github.ref == 'refs/heads/main'
-        run: |
-          pip install poetry
-          poetry self add poetry-version-plugin
-          shashort=$(git rev-parse --short HEAD)
-          git tag main_${shashort}
           make deploy
 
       - name: Install poetry, build, and publish via custom branch
