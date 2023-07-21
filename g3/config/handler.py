@@ -117,6 +117,3 @@ class Defaults:
 
     def set_defaults(self, value, default=None):
         return value if value else default
-
-
-# print(Defaults(ConfigHandler()).__dict__)
