@@ -1,0 +1,29 @@
+name: Push project build to JFrog Artifactory
+
+env:
+  ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
+  ARTIFACTORY_API_KEY: ${{ secrets.JFROG_API_KEY}}
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # This action checks out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install poetry and run tests
+        run: |
+          pip install poetry
+          make
+          make test
