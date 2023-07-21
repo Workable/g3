@@ -1,24 +1,24 @@
-from g3.domain.message_tone import MessageTone
-from g3.generate.client import OpenAIChat
-from g3.generate.pr.prompts.creator import Creator as PromptCreator
+from g3.generate.commit.prompts.creator import Creator as PromptCreator
+from g3.generate.creator import Creator as MessageCreator
 from g3.generate.preview.cli import Presenter
 from g3.github.client import Client as GHClient
+from g3.main import MessageTone
 
 
-class Creator:
+class Creator(MessageCreator):
     def __init__(self):
+        super().__init__()
         self.prompt_creator = PromptCreator()
-        self.openai = OpenAIChat()
         self.gh = GHClient()
+        self.message_type = "PR"
 
     def create(self, tone: MessageTone, jira=None, include=None) -> None:
         prompt = self.prompt_creator.create(tone, jira, include)
-        message = self.openai.generate(prompt)
-
-        reviewed_message, retry = Presenter.present(message, "pr")
+        message = self.create_message(prompt, tone, jira, include)
+        reviewed_message, retry = Presenter.present(message)
         while retry:
-            message = self.openai.generate(prompt)
-            reviewed_message, retry = Presenter.present(message, "commit")
+            message = self.create_message(prompt, tone, jira, include)
+            reviewed_message, retry = Presenter.present(message)
 
         title = reviewed_message.partition("\n")[0]
         description = reviewed_message.split("\n", 1)[1]

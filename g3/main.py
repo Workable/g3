@@ -23,7 +23,6 @@ signal.signal(signal.SIGINT, signal_handler)
 app = typer.Typer(pretty_exceptions_enable=False)
 
 
-
 @app.callback()
 def callback(ctx: typer.Context) -> None:
     if ctx.invoked_subcommand == "configure":
@@ -110,14 +109,8 @@ def commit(
     ] = "",
 ) -> None:
     """Generate a new commit message for staged changes"""
-    typer.echo(f"Generating commit message with {tone.value} tone..")
     if edit:
-        typer.echo(f"For existing commit: {edit}")
         raise NotImplementedError("The --edit option is not supported yet")
-    if jira:
-        typer.echo(f"Referencing Jira ticket: {jira}")
-    if include:
-        typer.echo(f"Including additional text:\n{include}")
 
     CommitMessageCreator().create(
         tone=tone,
@@ -147,14 +140,8 @@ def pr(
     ] = "",
 ) -> None:
     """Generate a new pull request description for the current branch"""
-    typer.echo(f"Generating PR description with {tone.value} tone..")
     if edit:
-        typer.echo(f"For previous PR: {edit}")
         raise NotImplementedError("The --edit option is not supported yet")
-    if jira:
-        typer.echo(f"Referencing Jira ticket: {jira}")
-    if include:
-        typer.echo(f"Including additional text:\n{include}")
 
     PRMessageCreator().create(
         tone=tone,

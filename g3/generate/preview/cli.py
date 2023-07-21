@@ -10,11 +10,7 @@ options = ["Submit", "Edit", "Regenerate", "Cancel"]
 
 class Presenter:
     @staticmethod
-    def present(message: str, type: str) -> Tuple[str, bool]:
-        if type not in ("pr", "commit"):
-            raise ValueError("Invalid message type")
-
-        print(f"\n[+] Generated {type} message:\n")
+    def present(message: str) -> Tuple[str, bool]:
         console = Console()
         md = Markdown(message, "github-dark")
         console.print(md)
@@ -33,7 +29,6 @@ class Presenter:
         elif selection == "Edit":
             message = editor.edit(contents=message).decode()
         elif selection == "Regenerate":
-            print("Regenerating..")
             return message, True
 
         return message, False
