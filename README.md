@@ -6,8 +6,16 @@ All-in-one CLI to commit your work to Github [[Docs](https://docs.google.com/pre
 g3 configure
 ```
 
-You will be asked to enter your Github token and open-ai key and some information about the commit and pr the tool will
-generate for you.
+You will be asked to enter:
+- your Github token 
+- your open-ai key
+- the openai model you want to use
+- the temperature which will be used to generate the commit messages and PR descriptions
+- the openai api version
+- the tone which will be used in the commit messages and PR descriptions
+- the commit message max characters
+- the PR description max words
+
 
 ## Usage
 
@@ -18,9 +26,10 @@ g3 commit
 ```
 
 #### Options:
-- t: The tone used
-- j: The jira ticket(s) referenced
-- i: Include a phrase you want
+- --tone: The tone used
+- --jira: The jira ticket(s) referenced
+- --include: Include a phrase you want
+- --edit: On a commit
 
 ### PR
 
@@ -29,6 +38,15 @@ g3 pr
 ```
 
 #### Options:
-- t: The tone used
-- j: The jira ticket(s) referenced
-- i: Include a phrase you want
+- --tone: The tone used
+- --jira: The jira ticket(s) referenced
+- --include: Include a phrase you want
+- --edit: On a pr
+
+
+### Alias
+
+You can also make an `alias g=g3` so that you execute simply:
+
+g commit
+g pr
