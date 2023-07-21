@@ -1,3 +1,5 @@
+from typing import List
+
 from g3.git.shell import Shell
 
 
@@ -9,3 +11,24 @@ def commit(message: str) -> None:
     """
     sh = Shell()
     sh.git("commit", "-m", message)
+
+
+def get_commit_messages(origin_branch: str) -> List[str]:
+    """
+    Get the commits between two branches.
+
+    :param base_branch: The base branch.
+    :param origin_branch: The origin branch.
+    """
+    res = []
+
+    sh = Shell()
+    assert sh.is_git()
+
+    head = sh.git("merge-base", sh.branch_name, origin_branch)
+    commits = sh.git("rev-list", f"^{head}", "HEAD")
+
+    for cm in commits.split("\n"):
+        res.append(sh.git("show", "-s", "--format=%B", cm))
+
+    return res

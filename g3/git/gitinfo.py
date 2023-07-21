@@ -6,6 +6,7 @@ from github.Commit import Commit
 from pydantic import BaseModel
 
 from g3.config import config
+from g3.git.client import get_commit_messages
 from g3.git.diff import Diff, get_filenames, get_files_changed
 from g3.git.shell import Shell
 
@@ -50,6 +51,9 @@ class GitInfo(BaseModel):
 
         encoding = tiktoken.encoding_for_model(config.model)
         return sum(len(encoding.encode(diff)) for diff in self.diffs)
+
+    def commit_messages(self, origin_branch: str) -> List[str]:
+        return get_commit_messages(origin_branch)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
