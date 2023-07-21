@@ -42,9 +42,9 @@ class ConfigHandler:
         return self.properties.get("model", "gpt-4-0613")
 
     @property
-    def temperature(self) -> Optional[float]:
+    def temperature(self) -> float:
         if not self.properties.get("temperature"):
-            return None
+            return 0
 
         return float(self.properties.get("temperature", "0"))
 
