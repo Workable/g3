@@ -14,6 +14,7 @@ on:
       version_to_build:
         description: 'Specify the version you want to build: use SEMVER format only'
         required: false
+        default: "0.0.0.dev"
   push:
     branches:
       - main
