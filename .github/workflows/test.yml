@@ -22,5 +22,5 @@ jobs:
           git tag 0.0.0.dev
           pip install poetry
           make install
-          . .venv/bin/activate
+          . venv/bin/activate
           make test
