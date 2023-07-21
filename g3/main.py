@@ -8,6 +8,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 from g3.config import config
+from g3.config.handler import Defaults
 from g3.domain.message_tone import MessageTone
 from g3.generate.commit.messages.creator import Creator as CommitMessageCreator
 from g3.generate.pr.messages.creator import Creator as PRMessageCreator
@@ -51,27 +52,37 @@ def configure() -> None:
             padding=1,
         )
     )
-
+    defaults = Defaults(config)
     questions = [
-        inquirer.Text("github_token", message="Your GitHub token"),
-        inquirer.Text("openai_key", message="Your OpenAI key"),
-        inquirer.List("openai_api_type", message="OpenAI API type", choices=["open_ai", "azure"], default="open_ai"),
+        inquirer.Text("github_token", message="Your GitHub token", default=defaults.github_token),
+        inquirer.Text("openai_key", message="Your OpenAI key", default=defaults.openai_key),
+        inquirer.List(
+            "openai_api_type", message="OpenAI API type", choices=["open_ai", "azure"], default=defaults.api_type
+        ),
         inquirer.Text(
-            "openai_api_base", message="OpenAI API base", ignore=lambda answers: answers["openai_api_type"] == "open_ai"
+            "openai_api_base",
+            message="OpenAI API base",
+            ignore=lambda answers: answers["openai_api_type"] == "open_ai",
+            default=defaults.api_base,
         ),
         inquirer.Text(
             "openai_deployment_id",
             message="OpenAI deployment ID",
             ignore=lambda answers: answers["openai_api_type"] == "open_ai",
+            default=defaults.deployment_id,
         ),
-        inquirer.Text("openai_model", message="OpenAI model", default="gpt-4-0613"),
-        inquirer.Text("openai_temperature", message="OpenAI temperature", default="0.0"),
-        inquirer.Text("openai_api_version", message="OpenAI API version", default="latest"),
-        inquirer.List(
-            "tone", message="Default tone", choices=[t.value for t in MessageTone], default=MessageTone.FRIENDLY.value
+        inquirer.Text("openai_model", message="OpenAI model", default=defaults.model),
+        inquirer.Text("openai_temperature", message="OpenAI temperature", default=defaults.temperature),
+        inquirer.Text("openai_api_version", message="OpenAI API version", default=defaults.api_version),
+        inquirer.List("tone", message="Default tone", choices=[t.value for t in MessageTone], default=defaults.tone),
+        inquirer.Text(
+            "commit_description_max_words",
+            message="Commit description max words",
+            default=defaults.commit_description_max_words,
         ),
-        inquirer.Text("commit_description_max_words", message="Commit description max words", default="50"),
-        inquirer.Text("pr_description_max_words", message="PR description max words", default="500"),
+        inquirer.Text(
+            "pr_description_max_words", message="PR description max words", default=defaults.pr_description_max_words
+        ),
     ]
     answers = inquirer.prompt(questions)
 
