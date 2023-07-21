@@ -97,7 +97,8 @@ def commit(
     tone: Annotated[
         MessageTone,
         typer.Option("--tone", "-t", help="The tone of voice that will be used to generate the commit message"),
-    ] = MessageTone.FRIENDLY,
+    ] = config.message_tone
+    or MessageTone.FRIENDLY,
     jira: Annotated[
         str, typer.Option("--jira", "-j", help="A Jira ticket number that should be referenced in the commit message")
     ] = "",
