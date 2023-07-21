@@ -31,8 +31,8 @@ class Creator:
                 stream = self.openai.stream(prompt)
                 reviewed_message, retry = Presenter.present_comparison(original_message, stream, "pr")
 
-            title = reviewed_message.partition("\n")[0]
-            description = reviewed_message.split("\n", 1)[1]
+            title = reviewed_message.split("\n")[1]
+            description = reviewed_message.split(title)[1]
             self.gh.update_pull_request(pr.number, title, description)
             print(f"Successfully updated PR: {pr.html_url}")
         else:
