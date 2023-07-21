@@ -83,6 +83,7 @@ def configure() -> None:
         inquirer.Text(
             "pr_description_max_words", message="PR description max words", default=defaults.pr_description_max_words
         ),
+        inquirer.Confirm("streaming_messages", message="Stream messages?", default=bool(defaults.streaming_messages)),
     ]
     answers = inquirer.prompt(questions)
 
@@ -98,6 +99,7 @@ def configure() -> None:
     config.set("message", "tone", answers["tone"])
     config.set("message", "commit_description_max_words", answers["commit_description_max_words"])
     config.set("message", "pr_description_max_words", answers["pr_description_max_words"])
+    config.set("message", "streaming", str(answers["streaming_messages"]))
 
     config.save_config()
     print(f"✅ Config file saved at: {config.config_file}")

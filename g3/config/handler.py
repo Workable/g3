@@ -70,6 +70,10 @@ class ConfigHandler:
     def pr_description_max_words(self) -> int:
         return int(self.properties.get("pr_description_max_words", "500"))
 
+    @property
+    def streaming_messages(self) -> bool:
+        return bool(self.properties.get("streaming", False))
+
     def has_been_configured(self) -> bool:
         return self.config.has_section("credentials")
 
@@ -118,6 +122,7 @@ class Defaults:
         self.tone = self.set_defaults(file_config.tone, MessageTone.FRIENDLY.value)
         self.commit_description_max_words = self.set_defaults(file_config.commit_description_max_words, 50)
         self.pr_description_max_words = self.set_defaults(file_config.pr_description_max_words, 500)
+        self.streaming_messages = self.set_defaults(file_config.streaming_messages, False)
 
     def set_defaults(self, value, default=None):
         return value if value is not None else default
