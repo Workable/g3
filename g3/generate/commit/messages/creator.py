@@ -20,12 +20,12 @@ class Creator:
     def create(self, tone: MessageTone, jira=None, include=None) -> None:
         prompt = self.prompt_creator.create(tone, jira, include)
 
-        stream = self.openai.generate(prompt)
+        stream = self.openai.stream(prompt)
         if self.commit:
             original_message = self.commit.commit.message
             reviewed_message, retry = Presenter.present_comparison(original_message, stream, "commit")
             while retry:
-                stream = self.openai.generate(prompt)
+                stream = self.openai.stream(prompt)
                 reviewed_message, retry = Presenter.present_comparison(original_message, stream, "commit")
 
             pyperclip.copy(reviewed_message)
@@ -33,7 +33,7 @@ class Creator:
         else:
             reviewed_message, retry = Presenter.present(stream, "commit")
             while retry:
-                stream = self.openai.generate(prompt)
+                stream = self.openai.stream(prompt)
                 reviewed_message, retry = Presenter.present(stream, "commit")
 
             commit(reviewed_message)
