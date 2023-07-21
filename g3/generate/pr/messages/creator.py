@@ -6,6 +6,7 @@ from g3.generate.pr.prompts.creator import Creator as PromptCreator
 from g3.generate.preview.cli import Presenter
 from g3.git.client import get_commit_messages
 from g3.github.client import Client as GHClient
+from g3.github.github_info import GithubInfo
 
 
 class Creator:
@@ -35,7 +36,7 @@ class Creator:
             self.gh.update_pull_request(self.pr.number, title, description)
             print(f"Successfully updated PR: {self.pr.html_url}")
         else:
-            commit_messages = get_commit_messages("main")
+            commit_messages = get_commit_messages(GithubInfo().default_branch)
             prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
             stream = self.openai.stream(prompt)
 
