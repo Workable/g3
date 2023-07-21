@@ -1,10 +1,10 @@
-from typing import Tuple
+from typing import Generator, Tuple
 
 import editor
 import inquirer
 from rich.console import Console
+from rich.live import Live
 from rich.markdown import Markdown
-from rich.panel import Panel
 
 options = ["Submit", "Edit", "Regenerate", "Cancel"]
 comparison_options = ["Regenerate", "Copy to clipboard", "Cancel"]
@@ -12,14 +12,18 @@ comparison_options = ["Regenerate", "Copy to clipboard", "Cancel"]
 
 class Presenter:
     @staticmethod
-    def present(message: str, type: str) -> Tuple[str, bool]:
+    def present(stream: Generator, type: str) -> Tuple[str, bool]:
         if type not in ("pr", "commit"):
             raise ValueError("Invalid message type")
 
         print(f"\n[+] Generated {type} message:\n")
         console = Console()
-        md = Markdown(message, "github-dark")
-        console.print(md)
+        message = ""
+        with Live(console=console) as live:
+            for chunk in stream:
+                message += chunk
+                md = Markdown(message, "github-dark")
+                live.update(md)
         print()
         questions = [
             inquirer.List(
@@ -41,26 +45,22 @@ class Presenter:
         return message, False
 
     @staticmethod
-    def present_comparison(original_message: str, generated_message: str, type: str) -> Tuple[str, bool]:
+    def present_comparison(original_message: str, stream: Generator, type: str) -> Tuple[str, bool]:
         if type not in ("pr", "commit"):
             raise ValueError("Invalid message type")
 
         console = Console()
-        console.print(
-            Panel(
-                Markdown(original_message, "github-dark"),
-                title="Original message",
-                padding=1,
-            )
-        )
-        console.print(
-            Panel(
-                Markdown(generated_message, "github-dark"),
-                title="Generated message",
-                style="blue bold",
-                padding=1,
-            )
-        )
+
+        console.print("\n[-] Original message:\n")
+        console.print(Markdown(original_message, "github-dark"))
+
+        message = ""
+        console.print("\n[+] Generated message:\n")
+        with Live(console=console) as live:
+            for chunk in stream:
+                message += chunk
+                md = Markdown(message, "github-dark")
+                live.update(md)
 
         questions = [
             inquirer.List(
@@ -75,6 +75,6 @@ class Presenter:
             exit(0)
         elif selection == "Regenerate":
             print("Regenerating..")
-            return generated_message, True
+            return message, True
 
-        return generated_message, False
+        return message, False

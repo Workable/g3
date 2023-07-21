@@ -13,12 +13,12 @@ class Creator:
 
     def create(self, tone: MessageTone, jira=None, include=None) -> None:
         prompt = self.prompt_creator.create(tone, jira, include)
-        message = self.openai.generate(prompt)
+        stream = self.openai.stream(prompt)
 
-        reviewed_message, retry = Presenter.present(message, "pr")
+        reviewed_message, retry = Presenter.present(stream, "pr")
         while retry:
-            message = self.openai.generate(prompt)
-            reviewed_message, retry = Presenter.present(message, "commit")
+            stream = self.openai.stream(prompt)
+            reviewed_message, retry = Presenter.present(stream, "commit")
 
         title = reviewed_message.partition("\n")[0]
         description = reviewed_message.split("\n", 1)[1]

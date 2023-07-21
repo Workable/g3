@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, Generator, List
 
 import openai
 
@@ -25,10 +25,14 @@ class OpenAI:
 
 
 class OpenAIChat(OpenAI):
-    def generate(self, prompt: List[Dict] | str, **kwargs: Any) -> str:
+    def stream(self, prompt: List[Dict] | str, **kwargs: Any) -> Generator:
         kwargs = config.args | kwargs
         resp = openai.ChatCompletion.create(
             messages=prompt,
+            stream=True,
             **kwargs,
         )
-        return resp["choices"][0]["message"]["content"]
+
+        for chunk in resp:
+            if "content" in chunk["choices"][0]["delta"]:
+                yield chunk["choices"][0]["delta"]["content"]
