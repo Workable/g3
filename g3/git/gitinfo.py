@@ -32,6 +32,7 @@ class GitInfo(BaseModel):
     branch: Optional[str] = None
     filenames: Optional[List[str]] = None
     diffs: Optional[List[Diff]] = None
+    commit_messages: Optional[List] = []
 
     @property
     def raw_diffs(self) -> str:
