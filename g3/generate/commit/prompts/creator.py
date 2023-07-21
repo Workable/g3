@@ -17,8 +17,14 @@ TS_PATTERN = re.compile(".*ts")
 RB_PATTERN = re.compile(".*rb")
 
 
-# TODO: Compute TOKEN_LIMIT depending on model in configuration minus the length of the prompt
-TOKENS_LIMIT = 5000
+def calculate_token_limit() -> int:
+    """
+    The limit is 5000 tokens for 8k model and 13000 tokens for 16k model
+    """
+    if re.search("16k", config.model):
+        return 13000
+
+    return 5000
 
 
 class Creator:
@@ -28,10 +34,10 @@ class Creator:
         self.python_sample = python_sample()
         self.git_info = GitInfo(commit=commit)
 
-        if self.git_info.tokens_of_diffs and self.git_info.tokens_of_diffs > TOKENS_LIMIT:
+        if self.git_info.tokens_of_diffs and self.git_info.tokens_of_diffs > calculate_token_limit():
             raise TokenLimitExceededException(
                 f"Too many tokens in the git diff."
-                f"The limit is {TOKENS_LIMIT} and the diff has {self.git_info.tokens_of_diffs} tokens"
+                f"The limit is {calculate_token_limit()} and the diff has {self.git_info.tokens_of_diffs} tokens"
             )
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
