@@ -36,10 +36,12 @@ class Creator:
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         if self.git_info.tokens_of_diffs and self.git_info.tokens_of_diffs > calculate_token_limit():
-            raise TokenLimitExceededException(
+            exception = TokenLimitExceededException(
                 f"Too many tokens in the git diff."
                 f"The limit is {calculate_token_limit()} and the diff has {self.git_info.tokens_of_diffs} tokens"
             )
+            print(exception)
+            exit(1)
 
         system_messages = self.create_system_messages(tone, jira, include)
 
