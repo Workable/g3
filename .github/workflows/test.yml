@@ -1,9 +1,5 @@
 name: Run tests
 
-env:
-  ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
-  ARTIFACTORY_API_KEY: ${{ secrets.JFROG_API_KEY}}
-
 on:
   pull_request:
 
