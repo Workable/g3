@@ -103,3 +103,21 @@ class ConfigHandler:
     def save_config(self):
         with open(self.config_file, "w") as f:
             self.config.write(f)
+
+
+class Defaults:
+    def __init__(self, file_config: ConfigHandler):
+        self.github_token = self.set_defaults(file_config.github_token)
+        self.openai_key = self.set_defaults(file_config.openai_key)
+        self.api_base = self.set_defaults(file_config.api_base)
+        self.deployment_id = self.set_defaults(file_config.deployment_id)
+        self.api_type = self.set_defaults(file_config.api_type, "open_ai")
+        self.model = self.set_defaults(file_config.model, "gpt-4-0613")
+        self.temperature = self.set_defaults(file_config.temperature, 0.0)
+        self.api_version = self.set_defaults(file_config.api_version, "latest")
+        self.tone = self.set_defaults(file_config.tone, MessageTone.FRIENDLY.value)
+        self.commit_description_max_words = self.set_defaults(file_config.commit_description_max_words, 50)
+        self.pr_description_max_words = self.set_defaults(file_config.pr_description_max_words, 500)
+
+    def set_defaults(self, value, default=None):
+        return value if value is not None else default
