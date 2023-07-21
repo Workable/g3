@@ -110,7 +110,7 @@ def commit(
     ] = "",
 ) -> None:
     """Generate a new commit message for staged changes"""
-    typer.echo(f"Generating commit message with {tone.value} tone.")
+    typer.echo(f"Generating commit message with {tone.value} tone..")
     if edit:
         typer.echo(f"For existing commit: {edit}")
         raise NotImplementedError("The --edit option is not supported yet")
@@ -147,7 +147,7 @@ def pr(
     ] = "",
 ) -> None:
     """Generate a new pull request description for the current branch"""
-    typer.echo(f"Generating PR description with {tone.value} tone.")
+    typer.echo(f"Generating PR description with {tone.value} tone..")
     if edit:
         typer.echo(f"For previous PR: {edit}")
         raise NotImplementedError("The --edit option is not supported yet")
