@@ -11,10 +11,12 @@ from g3.main import config
 class Creator:
     def __init__(self):
         self.git_info = GitInfo()
-        self.github_info = GithubInfo()
-        self.commit_messages = get_commit_messages(self.github_info.default_branch)
+        self.commit_messages: list[str] = []
 
-    def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
+    def create(
+        self, tone: MessageTone, commit_messages, jira: Optional[str] = None, include: Optional[str] = None
+    ) -> list:
+        self.commit_messages = commit_messages
         system_messages = self.create_system_messages(tone, jira, include)
         return system_messages + self.user_messages
 

@@ -154,27 +154,22 @@ def pr(
         typer.Option("--include", "-i", help="Text content that should be appended to the PR description"),
     ] = "",
     edit: Annotated[
-        str,
+        int,
         typer.Option(
             "--edit", "-e", help="A hash that points to a previous PR which will be used instead of the current branch"
         ),
-    ] = "",
+    ] = 0,
 ) -> None:
     """Generate a new pull request description for the current branch"""
     typer.echo(f"Generating PR description with {tone.value} tone..")
     if edit:
         typer.echo(f"For previous PR: {edit}")
-        raise NotImplementedError("The --edit option is not supported yet")
     if jira:
         typer.echo(f"Referencing Jira ticket: {jira}")
     if include:
         typer.echo(f"Including additional text:\n{include}")
 
-    PRMessageCreator().create(
-        tone=tone,
-        jira=jira,
-        include=include,
-    )
+    PRMessageCreator().create(tone=tone, jira=jira, include=include, edit=edit)
 
 
 if __name__ == "__main__":

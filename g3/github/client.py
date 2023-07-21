@@ -19,8 +19,15 @@ class Client:
     def get_commit(self, commit_hash: Optional[str] = None) -> Optional[Commit]:
         return self.repo.get_commit(sha=commit_hash) if commit_hash else None
 
-    def open_pull_request(self, title, body, base=None) -> PullRequest:
+    def get_pull_request(self, id) -> PullRequest:
+        return self.repo.get_pull(id)
+
+    def create_pull_request(self, title, body, base=None) -> PullRequest:
         if base is None:
             base = self.repo.default_branch
 
         return self.repo.create_pull(title=title, body=body, head=self.head, base=base)
+
+    def update_pull_request(self, id, title, body):
+        pull = self.get_pull_request(id)
+        return pull.edit(title=title, body=body)
