@@ -7,7 +7,8 @@ from rich.live import Live
 from rich.markdown import Markdown
 
 options = ["Submit", "Edit", "Regenerate", "Cancel"]
-comparison_options = ["Regenerate", "Copy to clipboard", "Cancel"]
+commit_comparison_options = ["Regenerate", "Copy to clipboard", "Cancel"]
+pr_comparison_options = ["Submit", "Edit", "Regenerate", "Cancel"]
 
 
 class Presenter:
@@ -66,7 +67,7 @@ class Presenter:
             inquirer.List(
                 "selection",
                 message="Action",
-                choices=comparison_options,
+                choices=commit_comparison_options if type == "commit" else pr_comparison_options,
             )
         ]
 
@@ -76,5 +77,7 @@ class Presenter:
         elif selection == "Regenerate":
             print("Regenerating..")
             return message, True
+        elif selection == "Edit":
+            message = editor.edit(contents=message).decode()
 
         return message, False

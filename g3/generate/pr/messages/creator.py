@@ -32,8 +32,8 @@ class Creator:
 
             title = reviewed_message.partition("\n")[0]
             description = reviewed_message.split("\n", 1)[1]
-            pr = self.gh.update_pull_request(self.pr.id, title, description)
-            print(f"Opened PR: {pr.html_url}")
+            self.gh.update_pull_request(self.pr.number, title, description)
+            print(f"Successfully updated PR: {self.pr.html_url}")
         else:
             commit_messages = get_commit_messages("main")
             prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
