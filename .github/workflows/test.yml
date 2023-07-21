@@ -25,5 +25,6 @@ jobs:
       - name: Install poetry and run tests
         run: |
           pip install poetry
+          poetry install
           make
           make test
