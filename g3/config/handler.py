@@ -2,6 +2,8 @@ import configparser
 from pathlib import Path
 from typing import Any, Optional
 
+from g3.domain.message_tone import MessageTone
+
 CONFIG_DIR = ".g3"
 CONFIG_FILE = "config"
 
@@ -51,6 +53,10 @@ class ConfigHandler:
     @property
     def api_version(self) -> Optional[str]:
         return self.properties.get("api_version")
+
+    @property
+    def message_tone(self) -> Optional[MessageTone]:
+        return MessageTone(self.tone) if self.tone else None
 
     @property
     def tone(self) -> Optional[str]:

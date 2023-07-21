@@ -12,7 +12,7 @@ class Creator:
     def __init__(self):
         self.git_info = GitInfo()
         self.github_info = GithubInfo()
-        self.commit_messages: list[str] = get_commit_messages(self.github_info.default_branch)
+        self.commit_messages = get_commit_messages(self.github_info.default_branch)
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         system_messages = self.create_system_messages(tone, jira, include)

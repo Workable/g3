@@ -49,7 +49,7 @@ class GitInfo(BaseModel):
             return None
 
         encoding = tiktoken.encoding_for_model(config.model)
-        return sum(len(encoding.encode(diff)) for diff in self.diffs)
+        return sum(len(encoding.encode(diff.patch + diff.filename)) for diff in self.diffs)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
