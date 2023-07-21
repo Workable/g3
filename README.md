@@ -44,9 +44,3 @@ g3 pr
 - --edit: On a pr
 
 
-### Alias
-
-You can also make an `alias g=g3` so that you execute simply:
-
-g commit
-g pr
