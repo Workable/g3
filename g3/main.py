@@ -1,10 +1,10 @@
 import signal
 from typing import Annotated
 
+import inquirer
 import typer
 from rich import print
 from rich.panel import Panel
-from rich.prompt import FloatPrompt, Prompt
 from rich.text import Text
 
 from g3.config import config
@@ -52,40 +52,44 @@ def configure() -> None:
         )
     )
 
-    github_token = Prompt.ask("Your GitHub token")
-    config.set("credentials", "github_token", github_token)
+    questions = [
+        inquirer.Text("github_token", message="Your GitHub token"),
+        inquirer.Text("openai_key", message="Your OpenAI key"),
+        inquirer.List("openai_api_type", message="OpenAI API type", choices=["open_ai", "azure"], default="open_ai"),
+        inquirer.Text(
+            "openai_api_base", message="OpenAI API base", ignore=lambda answers: answers["openai_api_type"] == "open_ai"
+        ),
+        inquirer.Text(
+            "openai_deployment_id",
+            message="OpenAI deployment ID",
+            ignore=lambda answers: answers["openai_api_type"] == "open_ai",
+        ),
+        inquirer.Text("openai_model", message="OpenAI model", default="gpt-4-0613"),
+        inquirer.Text("openai_temperature", message="OpenAI temperature", default="0.0"),
+        inquirer.Text("openai_api_version", message="OpenAI API version", default="latest"),
+        inquirer.List(
+            "tone", message="Default tone", choices=[t.value for t in MessageTone], default=MessageTone.FRIENDLY.value
+        ),
+        inquirer.Text("commit_description_max_words", message="Commit description max words", default="50"),
+        inquirer.Text("pr_description_max_words", message="PR description max words", default="500"),
+    ]
+    answers = inquirer.prompt(questions)
 
-    openai_key = Prompt.ask("Your OpenAI key")
-    config.set("credentials", "openai_key", openai_key)
-
-    openai_api_type = Prompt.ask("OpenAI API type", choices=["open_ai", "azure"], default="open_ai")
-    config.set("openai", "api_type", openai_api_type)
-    if openai_api_type == "azure":
-        openai_api_base = Prompt.ask("OpenAI API base")
-        config.set("openai", "api_base", openai_api_base)
-        openai_deployment_id = Prompt.ask("OpenAI deployment ID")
-        config.set("openai", "deployment_id", openai_deployment_id)
-
-    openai_model = Prompt.ask("OpenAI model", default="gpt-4-0613")
-    config.set("openai", "model", openai_model)
-
-    openai_temperature = FloatPrompt.ask("OpenAI temperature", default=0.0)
-    config.set("openai", "temperature", str(openai_temperature))
-
-    openai_api_version = Prompt.ask("OpenAI API version", default="latest")
-    config.set("openai", "api_version", openai_api_version)
-
-    tone = Prompt.ask("Default tone", choices=[t.value for t in MessageTone], default=MessageTone.FRIENDLY.value)
-    config.set("message", "tone", tone)
-
-    commit_description_max_words = Prompt.ask("Commit description max words", default="50")
-    config.set("message", "commit_description_max_words", commit_description_max_words)
-
-    pr_description_max_words = Prompt.ask("PR description max words", default="500")
-    config.set("message", "pr_description_max_words", pr_description_max_words)
+    config.set("credentials", "github_token", answers["github_token"])
+    config.set("credentials", "openai_key", answers["openai_key"])
+    config.set("openai", "api_type", answers["openai_api_type"])
+    if answers["openai_api_type"] == "azure":
+        config.set("openai", "api_base", answers["openai_api_base"])
+        config.set("openai", "deployment_id", answers["openai_deployment_id"])
+    config.set("openai", "model", answers["openai_model"])
+    config.set("openai", "temperature", answers["openai_temperature"])
+    config.set("openai", "api_version", answers["openai_api_version"])
+    config.set("message", "tone", answers["tone"])
+    config.set("message", "commit_description_max_words", answers["commit_description_max_words"])
+    config.set("message", "pr_description_max_words", answers["pr_description_max_words"])
 
     config.save_config()
-    typer.echo(f"✅ Config file located at: {config.config_file}")
+    print(f"✅ Config file saved at: {config.config_file}")
 
 
 @app.command()
