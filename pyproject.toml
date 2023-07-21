@@ -2,7 +2,16 @@
 name = "g3"
 version = "0.3.2"
 description = "An AI-powered CLI tool to help you write better commit messages and PRs."
-authors = ["Ioannis Karachristos <ioannis@workable.com>", "Kostis Kyrkos <konstantinos.kyrkos@workable.com>"]
+authors = [
+    "Panos Antonakos <antonakos@workable.com>",
+    "Angelos Mitsios <angelos.mitsios@workable.com>",
+    "Ioannis Karachristos <ioannis@workable.com>",
+    "Konstantinos Papadakis <konstantinos.papadakis@workable.com>",
+    "Konstantinos Rousopoulos <konstantinos.rousopoulos@workable.com>",
+    "Kostis Kyrkos <konstantinos.kyrkos@workable.com>",
+    "Petros Lambropoulos <petros.lambropoulos@workable.com>",
+    "Thomas Toumpoulis <thomas.toumpoulis@workable.com>",
+]
 readme = "README.md"
 
 [[tool.poetry.source]]
