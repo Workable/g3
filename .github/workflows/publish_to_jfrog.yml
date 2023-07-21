@@ -16,8 +16,6 @@ on:
         required: false
         default: "0.0.0.dev"
   push:
-    branches:
-      - main
     tags:
       - "*"
 
