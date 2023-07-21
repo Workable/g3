@@ -7,7 +7,6 @@ from g3.domain.message_tone import MessageTone
 from g3.generate.commit.prompts.examples.node import node_sample
 from g3.generate.commit.prompts.examples.python import python_sample
 from g3.generate.commit.prompts.examples.ruby import ruby_sample
-from g3.generate.commit.prompts.exceptions import TokenLimitExceededException
 from g3.git.gitinfo import GitInfo
 from g3.main import config
 
@@ -36,10 +35,12 @@ class Creator:
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         if self.git_info.tokens_of_diffs and self.git_info.tokens_of_diffs > calculate_token_limit():
-            raise TokenLimitExceededException(
-                f"Too many tokens in the git diff."
-                f"The limit is {calculate_token_limit()} and the diff has {self.git_info.tokens_of_diffs} tokens"
+            print(
+                f"Too many tokens in the git diff.\n"
+                f"The limit is {calculate_token_limit()} and the diff has {self.git_info.tokens_of_diffs} tokens\n"
+                f"As a suggestion please split your changes in multiple commits."
             )
+            exit(1)
 
         system_messages = self.create_system_messages(tone, jira, include)
 
