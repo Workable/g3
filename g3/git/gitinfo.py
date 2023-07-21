@@ -35,7 +35,6 @@ class GitInfo(BaseModel):
     commit: Optional[Commit] = None
     filenames: Optional[List[str]] = None
     diffs: Optional[List[Diff]] = None
-    commit_messages: Optional[List] = []
 
     class Config:
         arbitrary_types_allowed = True

@@ -9,7 +9,7 @@ from g3.main import config
 class Creator:
     def __init__(self):
         self.git_info = GitInfo()
-        self.commit_messages: list[str] = self.git_info.commit_messages  # mypy: noqa
+        self.commit_messages: list[str] = self.git_info.commit_messages("main")
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         system_messages = self.create_system_messages(tone, jira, include)
