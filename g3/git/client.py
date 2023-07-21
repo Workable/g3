@@ -40,7 +40,9 @@ def push(remote: str, branch: str, force: bool = False) -> None:
     sh = Shell()
     assert sh.is_git()
 
+    branch = sh.branch_name if not branch else branch
+
     if force:
         sh.git("push", remote, "--force", branch)
     else:
-        sh.git("push", remote, sh.branch_name)
+        sh.git("push", remote, branch)
