@@ -12,7 +12,7 @@ class OpenAIConfig(BaseSettings):
     api_base: Optional[str] = None
     deployment_id: Optional[str] = None
     model: str = "gpt-4-0613"
-    temperature: float = 0
+    temperature: Optional[float] = 0
 
     class Config:
         extra = Extra.ignore
