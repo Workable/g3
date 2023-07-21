@@ -10,21 +10,21 @@ from g3.github.github_info import GithubInfo
 
 
 class Creator:
-    def __init__(self, pr_id: Optional[int] = None):
-        self.pr = GHClient().get_pull_request(pr_id)
+    def __init__(self):
         self.prompt_creator = PromptCreator()
         self.openai = OpenAIChat()
         self.gh = GHClient()
 
-    def create(self, tone: MessageTone, jira=None, include=None) -> None:
-        if self.pr:
+    def create(self, tone: MessageTone, jira=None, include=None, edit: Optional[int] = None) -> None:
+        if edit:
+            pr = GHClient().get_pull_request(edit)
             commit_messages = []
-            for commit in self.pr.get_commits():
+            for commit in pr.get_commits():
                 commit_messages.append(commit.commit.message)
             prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
             stream = self.openai.stream(prompt)
 
-            original_message = f"{self.pr.title}\n\n{self.pr.body}"
+            original_message = f"{pr.title}\n\n{pr.body}"
 
             reviewed_message, retry = Presenter.present_comparison(original_message, stream, "pr")
             while retry:
@@ -33,8 +33,8 @@ class Creator:
 
             title = reviewed_message.partition("\n")[0]
             description = reviewed_message.split("\n", 1)[1]
-            self.gh.update_pull_request(self.pr.number, title, description)
-            print(f"Successfully updated PR: {self.pr.html_url}")
+            self.gh.update_pull_request(pr.number, title, description)
+            print(f"Successfully updated PR: {pr.html_url}")
         else:
             commit_messages = get_commit_messages(GithubInfo().default_branch)
             prompt = self.prompt_creator.create(tone, commit_messages, jira, include)

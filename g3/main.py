@@ -169,11 +169,7 @@ def pr(
     if include:
         typer.echo(f"Including additional text:\n{include}")
 
-    PRMessageCreator(pr_id=edit).create(
-        tone=tone,
-        jira=jira,
-        include=include,
-    )
+    PRMessageCreator().create(tone=tone, jira=jira, include=include, edit=edit)
 
 
 if __name__ == "__main__":
