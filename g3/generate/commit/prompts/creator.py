@@ -1,6 +1,8 @@
 import re
 from typing import Optional
 
+from github.Commit import Commit
+
 from g3.domain.message_tone import MessageTone
 from g3.generate.commit.prompts.examples.node import node_sample
 from g3.generate.commit.prompts.examples.python import python_sample
@@ -15,11 +17,11 @@ RB_PATTERN = re.compile(".*rb")
 
 
 class Creator:
-    def __init__(self):
-        self.ruby_sample = ruby_sample
-        self.node_sample = node_sample
-        self.python_sample = python_sample
-        self.git_info = GitInfo()
+    def __init__(self, commit: Optional[Commit] = None):
+        self.ruby_sample = ruby_sample()
+        self.node_sample = node_sample()
+        self.python_sample = python_sample()
+        self.git_info = GitInfo(commit=commit)
 
     def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
         system_messages = self.create_system_messages(tone, jira, include)
@@ -80,13 +82,16 @@ class Creator:
         ]
 
     def find_tech_stack(self) -> str:
-        py_sum = sum(1 for x in self.git_info.filenames if PY_PATTERN.match(x))
-        js_sum = sum(1 for x in self.git_info.filenames if JS_PATTERN.match(x) or TS_PATTERN.match(x))
-        rb_sum = sum(1 for x in self.git_info.filenames if RB_PATTERN.match(x))
+        if not self.git_info.filenames:
+            return ""
+
+        py_sum = sum(True for x in self.git_info.filenames if PY_PATTERN.match(x))
+        js_sum = sum(True for x in self.git_info.filenames if JS_PATTERN.match(x) or TS_PATTERN.match(x))
+        rb_sum = sum(True for x in self.git_info.filenames if RB_PATTERN.match(x))
 
         return self.most_files(py_sum, js_sum, rb_sum)
 
-    def most_files(self, py_sum, js_sum, rb_sum):
+    def most_files(self, py_sum: int, js_sum: int, rb_sum: int):
         max_value, name = py_sum, "python"
         if js_sum > max_value:
             max_value, name = js_sum, "node"

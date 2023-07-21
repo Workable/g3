@@ -1,7 +1,7 @@
 from g3.domain.message_tone import MessageTone
 from g3.generate.client import OpenAIChat
 from g3.generate.pr.prompts.creator import Creator as PromptCreator
-from g3.generate.preview.cli import display_selection
+from g3.generate.preview.cli import Presenter
 from g3.github.client import Client as GHClient
 
 
@@ -13,10 +13,14 @@ class Creator:
 
     def create(self, tone: MessageTone, jira=None, include=None) -> None:
         prompt = self.prompt_creator.create(tone, jira, include)
-        message = self.openai.generate(prompt)
+        stream = self.openai.stream(prompt)
 
-        reviewed_message = display_selection(message, "pr")
+        reviewed_message, retry = Presenter.present(stream, "pr")
+        while retry:
+            stream = self.openai.stream(prompt)
+            reviewed_message, retry = Presenter.present(stream, "commit")
+
         title = reviewed_message.partition("\n")[0]
         description = reviewed_message.split("\n", 1)[1]
-
-        self.gh.open_pull_request(title, description)
+        pr = self.gh.open_pull_request(title, description)
+        print(f"Opened PR: {pr.html_url}")

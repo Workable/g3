@@ -2,6 +2,7 @@ from enum import Enum
 from typing import List, Optional
 
 import tiktoken
+from github.Commit import Commit
 from pydantic import BaseModel
 
 from g3.config import config
@@ -30,8 +31,13 @@ class GitInfo(BaseModel):
     repo_owner: Optional[str] = None
     repo: Optional[str] = None
     branch: Optional[str] = None
+    commit: Optional[Commit] = None
     filenames: Optional[List[str]] = None
     diffs: Optional[List[Diff]] = None
+    default_branch: Optional[str] = None
+
+    class Config:
+        arbitrary_types_allowed = True
 
     @property
     def raw_diffs(self) -> str:
@@ -53,9 +59,13 @@ class GitInfo(BaseModel):
         sh = Shell()
         assert sh.is_git()
 
-        self.branch = sh.git("rev-parse", "--abbrev-ref", "HEAD")
         repo_info = sh.git("config", "--get", "remote.origin.url")
         self.repo, self.repo_owner = parse_git_remote_info(repo_info)
 
-        self.filenames = get_filenames(sh)
-        self.diffs = [diff for diff in get_files_changed(sh)]
+        if self.commit:
+            self.filenames = [f.filename for f in self.commit.files]
+            self.diffs = [Diff(filename=f.filename, patch=f.patch) for f in self.commit.files]
+        else:
+            self.branch = sh.git("rev-parse", "--abbrev-ref", "HEAD")
+            self.filenames = get_filenames(sh)
+            self.diffs = [diff for diff in get_files_changed(sh)]

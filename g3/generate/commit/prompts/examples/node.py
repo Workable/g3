@@ -1,5 +1,5 @@
 # flake8: noqa
-def node_sample():
+def node_sample() -> dict:
     return {
         "message": "Handle cv-parser new error format SRC-1426",
         "code": """
