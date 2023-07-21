@@ -1,7 +1,7 @@
 from g3.domain.message_tone import MessageTone
 from g3.generate.client import OpenAIChat
 from g3.generate.commit.prompts.creator import Creator as PromptCreator
-from g3.generate.preview.cli import display_selection
+from g3.generate.preview.cli import Presenter
 from g3.git.client import commit
 
 
@@ -14,5 +14,9 @@ class Creator:
         prompt = self.prompt_creator.create(tone, jira, include)
 
         message = self.openai.generate(prompt)
-        reviewed_message = display_selection(message, "commit")
+        reviewed_message, retry = Presenter.present(message, "commit")
+        while retry:
+            message = self.openai.generate(prompt)
+            reviewed_message, retry = Presenter.present(message, "commit")
+
         commit(reviewed_message)
