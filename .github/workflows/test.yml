@@ -21,6 +21,7 @@ jobs:
         run: |
           git tag 0.0.0.dev
           pip install poetry
+          poetry config virtualenvs.in-project true
           make install
-          . venv/bin/activate
+          . .venv/bin/activate
           make test
