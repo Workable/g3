@@ -57,7 +57,8 @@ class Creator:
  start with a verb. Whatever follows should be the commit title that you suggest. The commit description if asked,
  should be a few bullets which will contain short descriptions about the changes using at most
  {config.commit_description_max_words} words. If the words provided are 0 then you should not include a commit
- description. Use the following tone when creating the commit message: {tone.value}."""
+ description. Do not use the branch name in the commit description. Use the following tone when creating the commit
+ message: {tone.value}."""
         if include:
             content += f" Include in your response the following: ```{include}```."
         if jira:
