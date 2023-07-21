@@ -1,4 +1,4 @@
-from g3.git.git import parse_git_remote_info
+from g3.git.gitinfo import parse_git_remote_info
 
 
 def test_parse_git_remote_info() -> None:

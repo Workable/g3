@@ -1,6 +1,6 @@
 import os
 
-from g3.git.git import GitInfo
+from g3.git.gitinfo import GitInfo
 from g3.git.shell import Shell
 
 
