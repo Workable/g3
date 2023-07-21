@@ -11,7 +11,7 @@ class OpenAIConfig(BaseSettings):
     api_version: Optional[str] = None
     api_base: Optional[str] = None
     deployment_id: Optional[str] = None
-    model: str = "gpt-4"
+    model: str = "gpt-4-0613"
     temperature: float = 0
 
     class Config:

@@ -39,7 +39,7 @@ class ConfigHandler:
 
     @property
     def model(self) -> str:
-        return self.properties.get("model", "gpt-4")
+        return self.properties.get("model", "gpt-4-0613")
 
     @property
     def temperature(self) -> Optional[float]:
