@@ -57,7 +57,7 @@ def configure() -> None:
         openai_deployment_id = Prompt.ask("OpenAI deployment ID")
         config.set("openai", "deployment_id", openai_deployment_id)
 
-    openai_model = Prompt.ask("OpenAI model", default="gpt-4")
+    openai_model = Prompt.ask("OpenAI model", default="gpt-4-0613")
     config.set("openai", "model", openai_model)
 
     openai_temperature = FloatPrompt.ask("OpenAI temperature", default=0.0)
