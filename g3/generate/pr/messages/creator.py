@@ -4,7 +4,9 @@ from g3.domain.message_tone import MessageTone
 from g3.generate.client import OpenAIChat
 from g3.generate.pr.prompts.creator import Creator as PromptCreator
 from g3.generate.preview.cli import Presenter
+from g3.git import client as git
 from g3.git.client import get_commit_messages
+from g3.git.gitinfo import GitInfo
 from g3.github.client import Client as GHClient
 from g3.github.github_info import GithubInfo
 
@@ -14,6 +16,7 @@ class Creator:
         self.prompt_creator = PromptCreator()
         self.openai = OpenAIChat()
         self.gh = GHClient()
+        self.git_info = GitInfo()
 
     def create(self, tone: MessageTone, jira=None, include=None, edit: Optional[int] = None) -> None:
         if edit:
@@ -33,6 +36,7 @@ class Creator:
 
             title = reviewed_message.split("\n")[1]
             description = reviewed_message.split(title)[1]
+            git.push("origin", self.git_info.branch, force=True)
             self.gh.update_pull_request(pr.number, title, description)
             print(f"Successfully updated PR: {pr.html_url}")
         else:
@@ -47,5 +51,6 @@ class Creator:
 
             title = reviewed_message.split("\n")[1]
             description = reviewed_message.split(title)[1]
+            git.push("origin", self.git_info.branch)
             pr = self.gh.create_pull_request(title, description)
             print(f"Opened PR: {pr.html_url}")
