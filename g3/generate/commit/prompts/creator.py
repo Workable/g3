@@ -80,7 +80,7 @@ class Creator:
         if include:
             content += f" Include in your response the following: ```{include}```."
         if jira:
-            content += f" Incorporate the following Jira ticket: ```{jira}```."
+            content += f" Include in the end of your response the following Jira ticket: ```{jira}```."
         content += " Your response should be in markdown format and you should split each sentence to a new line."
 
         return [{"role": "system", "content": content.replace("\n", "")}]
