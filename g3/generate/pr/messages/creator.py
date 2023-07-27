@@ -51,6 +51,6 @@ class Creator:
 
             title = reviewed_message.split("\n")[1]
             description = reviewed_message.split(title)[1]
-            git.push("origin", self.git_info.branch)
+            git.push("origin", self.git_info.branch, force=True)
             pr = self.gh.create_pull_request(title, description)
             print(f"Opened PR: {pr.html_url}")
