@@ -8,6 +8,10 @@ pip install g3
 
 ## Configuration
 
+```bash
+g3 configure
+```
+
 You will be asked to enter:
 - your Github token 
 - your open-ai key
