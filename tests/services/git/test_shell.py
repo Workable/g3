@@ -1,7 +1,7 @@
 import os
 
-from g3.git.gitinfo import GitInfo
-from g3.git.shell import Shell
+from g3.services.git.gitinfo import GitInfo
+from g3.services.git.shell import Shell
 
 
 def test_shell():

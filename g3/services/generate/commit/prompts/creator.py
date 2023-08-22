@@ -4,11 +4,11 @@ from typing import Optional
 from github.Commit import Commit
 
 from g3.domain.message_tone import MessageTone
-from g3.generate.commit.prompts.examples.node import node_sample
-from g3.generate.commit.prompts.examples.python import python_sample
-from g3.generate.commit.prompts.examples.ruby import ruby_sample
-from g3.git.gitinfo import GitInfo
 from g3.main import config
+from g3.services.generate.commit.prompts.examples.node import node_sample
+from g3.services.generate.commit.prompts.examples.python import python_sample
+from g3.services.generate.commit.prompts.examples.ruby import ruby_sample
+from g3.services.git.gitinfo import GitInfo
 
 PY_PATTERN = re.compile(".*py")
 JS_PATTERN = re.compile(".*js")

@@ -3,7 +3,7 @@ from typing import Generator, List
 from pydantic import BaseModel
 
 from g3.config.exclude import EXCLUDED_FILES
-from g3.git.shell import Shell
+from g3.services.git.shell import Shell
 
 
 class Diff(BaseModel):

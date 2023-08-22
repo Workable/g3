@@ -5,7 +5,7 @@ from github.Commit import Commit
 from github.PullRequest import PullRequest
 
 from g3.config import config
-from g3.git.gitinfo import GitInfo
+from g3.services.git.gitinfo import GitInfo
 
 
 class Client:

@@ -6,8 +6,8 @@ from github.Commit import Commit
 from pydantic import BaseModel
 
 from g3.config import config
-from g3.git.diff import Diff, get_filenames, get_files_changed
-from g3.git.shell import Shell
+from g3.services.git.diff import Diff, get_filenames, get_files_changed
+from g3.services.git.shell import Shell
 
 
 # Make an enum with git protocol options

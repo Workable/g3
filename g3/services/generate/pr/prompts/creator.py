@@ -1,9 +1,9 @@
 from typing import Optional
 
 from g3.domain.message_tone import MessageTone
-from g3.generate.pr.prompts.template import pr_template
-from g3.git.gitinfo import GitInfo
 from g3.main import config
+from g3.services.generate.pr.prompts.template import pr_template
+from g3.services.git.gitinfo import GitInfo
 
 
 class Creator:

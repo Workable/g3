@@ -1,6 +1,6 @@
 from typing import List
 
-from g3.git.shell import Shell
+from g3.services.git.shell import Shell
 
 
 def commit(message: str) -> None:

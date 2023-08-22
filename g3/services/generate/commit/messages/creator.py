@@ -4,11 +4,11 @@ import pyperclip
 from rich import print
 
 from g3.domain.message_tone import MessageTone
-from g3.generate.client import OpenAIChat
-from g3.generate.commit.prompts.creator import Creator as PromptCreator
-from g3.generate.preview.cli import Presenter
-from g3.git.client import commit
-from g3.github.client import Client
+from g3.services.generate.client import OpenAIChat
+from g3.services.generate.commit.prompts.creator import Creator as PromptCreator
+from g3.services.generate.preview.cli import Presenter
+from g3.services.git.client import commit
+from g3.services.github.client import Client
 
 
 class Creator:
