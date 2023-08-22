@@ -8,7 +8,6 @@ from g3.main import config
 from g3.services.generate.commit.prompts.examples.node import node_sample
 from g3.services.generate.commit.prompts.examples.python import python_sample
 from g3.services.generate.commit.prompts.examples.ruby import ruby_sample
-from g3.services.git.gitinfo import GitInfo
 
 PY_PATTERN = re.compile(".*py")
 JS_PATTERN = re.compile(".*js")
@@ -28,6 +27,8 @@ def calculate_token_limit() -> int:
 
 class Creator:
     def __init__(self, commit: Optional[Commit] = None):
+        from g3.services.git.gitinfo import GitInfo
+
         self.ruby_sample = ruby_sample()
         self.node_sample = node_sample()
         self.python_sample = python_sample()
@@ -52,7 +53,7 @@ class Creator:
         content = f"""
  Please provide a commit message for the provided code. Code: ```{self.git_info.raw_diffs}```.
  The code is from a git branch named {self.git_info.branch}.
- The code is from a git repository named {self.git_info.repo}.
+ The code is from a git repository named {self.git_info.repo_name}.
  The code contains changes in the following files: {self.git_info.filenames}."""
 
         return [
