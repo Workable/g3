@@ -73,6 +73,7 @@ class Shell:
         self.quiet = quiet
         self.testing = testing
         self.testing_time = 1112911993
+        assert self.is_git()
 
     def is_git(self) -> bool:
         """Whether this shell corresponds to a Git working copy."""

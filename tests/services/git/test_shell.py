@@ -1,15 +1,11 @@
 import os
 
+from g3.services.git import sh
 from g3.services.git.gitinfo import GitInfo
-from g3.services.git.shell import Shell
 
 
 def test_shell():
-    sh = Shell()
     assert sh.cwd == os.getcwd()
-
-    assert sh.is_git()
-
     repo_name = sh.repo_name
     assert repo_name == "g3"
 
