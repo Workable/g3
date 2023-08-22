@@ -6,8 +6,8 @@ from github.Commit import Commit
 from pydantic import BaseModel
 
 from g3.config import config
+from g3.services.git import sh
 from g3.services.git.diff import Diff, get_filenames, get_files_changed
-from g3.services.git.shell import Shell
 
 
 # Make an enum with git protocol options
@@ -56,9 +56,6 @@ class GitInfo(BaseModel):
         self.__post_init__()
 
     def __post_init__(self):
-        sh = Shell()
-        assert sh.is_git()
-
         repo_info = sh.git("config", "--get", "remote.origin.url")
         self.repo, self.repo_owner = parse_git_remote_info(repo_info)
 
