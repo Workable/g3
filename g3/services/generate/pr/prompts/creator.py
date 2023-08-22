@@ -3,13 +3,12 @@ from typing import Optional
 from g3.domain.message_tone import MessageTone
 from g3.main import config
 from g3.services.generate.pr.prompts.template import pr_template
-from g3.services.git.gitinfo import GitInfo
+from g3.services.git import git_info
 
 
 class Creator:
     def __init__(self):
-        self.git_info = GitInfo()
-        self.commit_messages: list[str] = []
+        self.commit_messages = []
 
     def create(
         self, tone: MessageTone, commit_messages, jira: Optional[str] = None, include: Optional[str] = None
@@ -21,8 +20,8 @@ class Creator:
     @property
     def user_messages(self) -> list:
         content = f"""Please provide a pull request description for the provided commit messages.
- Commits: ```{self.commit_messages}```. The commit messages are form a git branch named {self.git_info.branch}.
- The commit messages are from a git repository named {self.git_info.repo}."""
+ Commits: ```{self.commit_messages}```. The commit messages are form a git branch named {git_info.branch}.
+ The commit messages are from a git repository named {git_info.repo_name}."""
 
         return [
             {

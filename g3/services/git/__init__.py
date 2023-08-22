@@ -1,3 +1,6 @@
-from g3.services.git.shell import Shell
+from g3.services.git import client
+from g3.services.git.gitinfo import GitInfo
 
-sh = Shell()
+git_info = GitInfo()
+
+__all__ = ["GitInfo", "git_info", "client"]
