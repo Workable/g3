@@ -133,11 +133,7 @@ def commit(
     if include:
         typer.echo(f"Including additional text:\n{include}")
 
-    CommitMessageCreator(commit_hash=edit).create(
-        tone=tone,
-        jira=jira,
-        include=include,
-    )
+    CommitMessageCreator().create(tone=tone, jira=jira, include=include, edit=edit)
 
 
 @app.command()
@@ -145,7 +141,8 @@ def pr(
     tone: Annotated[
         MessageTone,
         typer.Option("--tone", "-t", help="The tone of voice that will be used to generate the PR description"),
-    ] = MessageTone.FRIENDLY,
+    ] = config.message_tone
+    or MessageTone.FRIENDLY,
     jira: Annotated[
         str, typer.Option("--jira", "-j", help="A Jira ticket number that should be referenced in the PR description")
     ] = "",

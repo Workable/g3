@@ -1,5 +1,3 @@
-from typing import Optional
-
 from github import Auth, Github
 from github.Commit import Commit
 from github.PullRequest import PullRequest
@@ -15,8 +13,8 @@ class Client:
         self.repo = self.g.get_repo(f"{git_info.repo_owner}/{git_info.repo_name}")
         self.head = git_info.branch
 
-    def get_commit(self, commit_hash: Optional[str] = None) -> Optional[Commit]:
-        return self.repo.get_commit(sha=commit_hash) if commit_hash else None
+    def get_commit(self, commit_hash: str) -> Commit:
+        return self.repo.get_commit(sha=commit_hash)
 
     def get_pull_request(self, id) -> PullRequest:
         return self.repo.get_pull(id)

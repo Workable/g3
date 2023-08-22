@@ -8,6 +8,7 @@ from g3.main import config
 from g3.services.generate.commit.prompts.examples.node import node_sample
 from g3.services.generate.commit.prompts.examples.python import python_sample
 from g3.services.generate.commit.prompts.examples.ruby import ruby_sample
+from g3.services.git.gitinfo import GitInfo
 
 PY_PATTERN = re.compile(".*py")
 JS_PATTERN = re.compile(".*js")
@@ -27,34 +28,35 @@ def calculate_token_limit() -> int:
 
 class Creator:
     def __init__(self, commit: Optional[Commit] = None):
-        from g3.services.git.gitinfo import GitInfo
-
         self.ruby_sample = ruby_sample()
         self.node_sample = node_sample()
         self.python_sample = python_sample()
-        self.git_info = GitInfo(commit=commit)
 
-    def create(self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None) -> list:
-        if self.git_info.tokens_of_diffs and self.git_info.tokens_of_diffs > calculate_token_limit():
+    def create(
+        self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None, edit: Optional[str] = None
+    ) -> list:
+        from g3.services.git.gitinfo import GitInfo
+
+        git_info = GitInfo(commit=edit)
+        if git_info.tokens_of_diffs and git_info.tokens_of_diffs > calculate_token_limit():
             print(
                 f"Too many tokens in the git diff.\n"
-                f"The limit is {calculate_token_limit()} and the diff has {self.git_info.tokens_of_diffs} tokens\n"
+                f"The limit is {calculate_token_limit()} and the diff has {git_info.tokens_of_diffs} tokens\n"
                 f"As a suggestion please split your changes in multiple commits."
             )
             exit(1)
 
         system_messages = self.create_system_messages(tone, jira, include)
+        user_messages = self.create_user_messages(git_info)
 
-        # return system_messages + self.examples_messages + self.user_messages
-        return system_messages + self.user_messages
+        return system_messages + user_messages
 
-    @property
-    def user_messages(self) -> list:
+    def create_user_messages(self, git_info: GitInfo) -> list:
         content = f"""
- Please provide a commit message for the provided code. Code: ```{self.git_info.raw_diffs}```.
- The code is from a git branch named {self.git_info.branch}.
- The code is from a git repository named {self.git_info.repo_name}.
- The code contains changes in the following files: {self.git_info.filenames}."""
+ Please provide a commit message for the provided code. Code: ```{git_info.raw_diffs}```.
+ The code is from a git branch named {git_info.branch}.
+ The code is from a git repository named {git_info.repo_name}.
+ The code contains changes in the following files: {git_info.filenames}."""
 
         return [
             {
@@ -86,9 +88,8 @@ class Creator:
 
         return [{"role": "system", "content": content.replace("\n", "")}]
 
-    @property
-    def example_messages(self) -> list:
-        tech_stack = self.find_tech_stack()
+    def create_example_messages(self, git_info: GitInfo) -> list:
+        tech_stack = self.find_tech_stack(git_info)
         sample = self.get_sample(tech_stack)
         if not sample:
             return []
@@ -101,13 +102,13 @@ class Creator:
             {"role": "assistant", "content": sample.get("message")},
         ]
 
-    def find_tech_stack(self) -> str:
-        if not self.git_info.filenames:
+    def find_tech_stack(self, git_info) -> str:
+        if not git_info.filenames:
             return ""
 
-        py_sum = sum(True for x in self.git_info.filenames if PY_PATTERN.match(x))
-        js_sum = sum(True for x in self.git_info.filenames if JS_PATTERN.match(x) or TS_PATTERN.match(x))
-        rb_sum = sum(True for x in self.git_info.filenames if RB_PATTERN.match(x))
+        py_sum = sum(True for x in git_info.filenames if PY_PATTERN.match(x))
+        js_sum = sum(True for x in git_info.filenames if JS_PATTERN.match(x) or TS_PATTERN.match(x))
+        rb_sum = sum(True for x in git_info.filenames if RB_PATTERN.match(x))
 
         return self.most_files(py_sum, js_sum, rb_sum)
 
