@@ -10,8 +10,8 @@ from rich.text import Text
 from g3.config import config
 from g3.config.handler import Defaults
 from g3.domain.message_tone import MessageTone
-from g3.generate.commit.messages.creator import Creator as CommitMessageCreator
-from g3.generate.pr.messages.creator import Creator as PRMessageCreator
+from g3.services.generate.commit.messages.creator import Creator as CommitMessageCreator
+from g3.services.generate.pr.messages.creator import Creator as PRMessageCreator
 
 
 def signal_handler(sig, frame):

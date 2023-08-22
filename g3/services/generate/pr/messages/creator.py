@@ -1,14 +1,14 @@
 from typing import Optional
 
 from g3.domain.message_tone import MessageTone
-from g3.generate.client import OpenAIChat
-from g3.generate.pr.prompts.creator import Creator as PromptCreator
-from g3.generate.preview.cli import Presenter
-from g3.git import client as git
-from g3.git.client import get_commit_messages
-from g3.git.gitinfo import GitInfo
-from g3.github.client import Client as GHClient
-from g3.github.github_info import GithubInfo
+from g3.services.generate.client import OpenAIChat
+from g3.services.generate.pr.prompts.creator import Creator as PromptCreator
+from g3.services.generate.preview.cli import Presenter
+from g3.services.git import client as git
+from g3.services.git.client import get_commit_messages
+from g3.services.git.gitinfo import GitInfo
+from g3.services.github.client import Client as GHClient
+from g3.services.github.github_info import GithubInfo
 
 
 class Creator:

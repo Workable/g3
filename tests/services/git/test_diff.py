@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from g3.git.diff import exclude_files
-from g3.git.gitinfo import GitInfo
-from g3.git.shell import Shell
+from g3.services.git.diff import exclude_files
+from g3.services.git.gitinfo import GitInfo
+from g3.services.git.shell import Shell
 
 
 @pytest.fixture()
