@@ -24,7 +24,7 @@ class Creator:
             commit_messages = []
             for commit in pr.get_commits():
                 commit_messages.append(commit.commit.message)
-            prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
+            prompt = self.prompt_creator.create(commit_messages, tone, jira, include)
             stream = self.openai.stream(prompt)
 
             original_message = f"{pr.title}\n\n{pr.body}"
@@ -41,7 +41,7 @@ class Creator:
             print(f"Successfully updated PR: {pr.html_url}")
         else:
             commit_messages = get_commit_messages(self.default_branch, git_info.branch)
-            prompt = self.prompt_creator.create(tone, commit_messages, jira, include)
+            prompt = self.prompt_creator.create(commit_messages, tone, jira, include)
             stream = self.openai.stream(prompt)
 
             reviewed_message, retry = Presenter.present(stream, "pr")
