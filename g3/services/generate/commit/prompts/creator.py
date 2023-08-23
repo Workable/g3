@@ -1,19 +1,9 @@
 import re
 from typing import Optional
 
-from github.Commit import Commit
-
 from g3.domain.message_tone import MessageTone
 from g3.main import config
-from g3.services.generate.commit.prompts.examples.node import node_sample
-from g3.services.generate.commit.prompts.examples.python import python_sample
-from g3.services.generate.commit.prompts.examples.ruby import ruby_sample
 from g3.services.git.gitinfo import GitInfo
-
-PY_PATTERN = re.compile(".*py")
-JS_PATTERN = re.compile(".*js")
-TS_PATTERN = re.compile(".*ts")
-RB_PATTERN = re.compile(".*rb")
 
 
 def calculate_token_limit() -> int:
@@ -27,11 +17,6 @@ def calculate_token_limit() -> int:
 
 
 class Creator:
-    def __init__(self, commit: Optional[Commit] = None):
-        self.ruby_sample = ruby_sample()
-        self.node_sample = node_sample()
-        self.python_sample = python_sample()
-
     def create(
         self, tone: MessageTone, jira: Optional[str] = None, include: Optional[str] = None, edit: Optional[str] = None
     ) -> list:
@@ -87,46 +72,3 @@ class Creator:
         content += " Your response should be in markdown format and you should split each sentence to a new line."
 
         return [{"role": "system", "content": content.replace("\n", "")}]
-
-    def create_example_messages(self, git_info: GitInfo) -> list:
-        tech_stack = self.find_tech_stack(git_info)
-        sample = self.get_sample(tech_stack)
-        if not sample:
-            return []
-
-        return [
-            {
-                "role": "user",
-                "content": f"Please provide a commit message for the provided code. Code: ```{sample.get('code')}```",
-            },
-            {"role": "assistant", "content": sample.get("message")},
-        ]
-
-    def find_tech_stack(self, git_info) -> str:
-        if not git_info.filenames:
-            return ""
-
-        py_sum = sum(True for x in git_info.filenames if PY_PATTERN.match(x))
-        js_sum = sum(True for x in git_info.filenames if JS_PATTERN.match(x) or TS_PATTERN.match(x))
-        rb_sum = sum(True for x in git_info.filenames if RB_PATTERN.match(x))
-
-        return self.most_files(py_sum, js_sum, rb_sum)
-
-    def most_files(self, py_sum: int, js_sum: int, rb_sum: int):
-        max_value, name = py_sum, "python"
-        if js_sum > max_value:
-            max_value, name = js_sum, "node"
-        if rb_sum > max_value:
-            max_value, name = rb_sum, "ruby"
-
-        return name
-
-    def get_sample(self, stack: str) -> dict | None:
-        if stack == "ruby":
-            return self.ruby_sample
-        elif stack == "node":
-            return self.node_sample
-        elif stack == "python":
-            return self.python_sample
-
-        return None
