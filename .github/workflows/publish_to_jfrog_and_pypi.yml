@@ -32,7 +32,7 @@ jobs:
         env:
           ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
           ARTIFACTORY_API_KEY: ${{ secrets.JFROG_API_KEY}}
-          PYPI_TOKEN: ${{ secrets.PYPI_API_KEY }}
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_KEY }}
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           pip install poetry
@@ -46,7 +46,7 @@ jobs:
         env:
           ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
           ARTIFACTORY_API_KEY: ${{ secrets.JFROG_API_KEY}}
-          PYPI_TOKEN: ${{ secrets.PYPI_API_KEY }}
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_KEY }}
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
           pip install poetry

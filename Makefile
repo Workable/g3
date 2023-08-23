@@ -46,7 +46,7 @@ publish-to-jfrog:
 	@poetry publish --repository jfrog --username $(ARTIFACTORY_USERNAME) --password $(ARTIFACTORY_API_KEY)
 
 publish-to-pypi:
-	@poetry config pypi-token.pypi $(PYPI_TOKEN) && @poetry publish
+	@poetry publish
 
 publish: publish-to-jfrog publish-to-pypi
 
