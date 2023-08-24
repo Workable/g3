@@ -8,6 +8,10 @@ All-in-one CLI to commit your work to Github [[Presentation](https://docs.google
 pip install g3
 ```
 
+#### Alias
+
+You can, optionally, create the `alias g=g3` so that you execute simply `g commit` and `g pr`.
+
 ## Configuration
 
 ```bash
@@ -34,10 +38,10 @@ g3 commit
 ```
 
 #### Options:
-- --tone: The tone used
-- --jira: The jira ticket(s) referenced
-- --include: Include a phrase you want
-- --edit: On a commit
+- --tone: The tone to use
+- --jira: The jira ticket(s) to reference
+- --include: A phrase you want to include
+- --edit: The hash of the commit you want to rephrase
 
 ### PR
 
@@ -46,14 +50,10 @@ g3 pr
 ```
 
 #### Options:
-- --tone: The tone used
-- --jira: The jira ticket(s) referenced
-- --include: Include a phrase you want
-- --edit: On a pr
-
-### Alias
-
-You can also make an `alias g=g3` so that you execute simply `g commit` and `g pr`.
+- --tone: The tone to use
+- --jira: The jira ticket(s) to reference
+- --include: A phrase you want to include
+- --edit: The number of the PR you want to rephrase
 
 ## Development
 
