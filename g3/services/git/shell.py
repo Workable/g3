@@ -73,6 +73,7 @@ class Shell:
         self.quiet = quiet
         self.testing = testing
         self.testing_time = 1112911993
+        assert self.is_git()
 
     def is_git(self) -> bool:
         """Whether this shell corresponds to a Git working copy."""
@@ -176,16 +177,19 @@ class Shell:
         loop = asyncio.get_event_loop()
         returncode, out, err = loop.run_until_complete(run())
 
+        msg = ""
         if err:
-            logging.debug("# stderr:\n" + err.decode(errors="backslashreplace"))
+            msg = err.decode(errors="backslashreplace")
+            logging.debug("# stderr:\n" + msg)
         if out:
-            logging.debug(("# stdout:\n" if err else "") + out.decode(errors="backslashreplace").replace("\0", "\\0"))
+            msg = out.decode(errors="backslashreplace").replace("\0", "\\0")
+            logging.debug(("# stdout:\n" if err else "") + msg)
 
         if exitcode:
             logging.debug("Exit code: {}".format(returncode))
             return returncode == 0
         if returncode != 0:
-            raise RuntimeError(f"{args} failed with exit code {returncode}. Output was '{out.decode()}'")
+            raise RuntimeError(f"{args} failed with exit code {returncode} cause {msg}")
 
         if stdout == subprocess.PIPE:
             return out.decode()  # do a strict decode for actual return
@@ -231,13 +235,3 @@ class Shell:
                 kwargs["stderr"] = subprocess.PIPE
 
         return self._maybe_rstrip(self.sh(*(("git",) + args), **kwargs))
-
-    @property
-    def repo_name(self) -> str:
-        """Return the name of the Git repository."""
-        return os.path.basename(self.git("rev-parse", "--show-toplevel"))
-
-    @property
-    def branch_name(self) -> str:
-        """Return the name of the current Git branch."""
-        return self.git("rev-parse", "--abbrev-ref", "HEAD")

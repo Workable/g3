@@ -1,6 +1,6 @@
 from pydantic.main import BaseModel
 
-from g3.github.client import Client
+from g3.services.github.client import Client
 
 
 class GithubInfo(BaseModel):
