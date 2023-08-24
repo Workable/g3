@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "g3"
-version = "0.4.2"
+version = "0.4.3"
 description = "An AI-powered CLI tool to help you write better commit messages and PRs."
 authors = [
     "Panos Antonakos <antonakos@workable.com>",
