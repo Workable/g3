@@ -36,7 +36,7 @@ class Creator:
 
             title = reviewed_message.split("\n")[1]
             description = reviewed_message.split(title)[1]
-            git.push("origin", git_info.branch, force=True)
+            git.push("origin", git_info.branch)
             self.gh.update_pull_request(pr.number, title, description)
             print(f"Successfully updated PR: {pr.html_url}")
         else:
@@ -51,6 +51,6 @@ class Creator:
 
             title = reviewed_message.split("\n")[1]
             description = reviewed_message.split(title)[1]
-            git.push("origin", git_info.branch, force=True)
+            git.push("origin", git_info.branch)
             pr = self.gh.create_pull_request(title, description)
             print(f"Opened PR: {pr.html_url}")
