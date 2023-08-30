@@ -93,6 +93,6 @@ def push(remote: str, branch: str, force: bool = False) -> None:
     Push the current branch to the remote.
     """
     if force:
-        sh.git("push", remote, "--force", branch)
+        sh.git("push", "--set-upstream", remote, "--force", branch)
     else:
-        sh.git("push", remote, branch)
+        sh.git("push", "--set-upstream", remote, branch)
