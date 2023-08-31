@@ -41,7 +41,8 @@ class Creator:
  {config.pr_description_max_words} words in total and it should be helpful to the reader in order to
  understand the changes made. The reader of the pull request description needs to understand the changes
  in order to approve the pull request or ask for the needed changes. If Jira tickets are provided then include them in
- the pull request description. Use the following tone when creating the pull request message: {tone}."""
+ the pull request description. Do not use the branch or the repository name. Use the following tone when creating
+ the pull request message: {tone}."""
         if include:
             content += f" Include in your response the following: {include}"
         if jira:
