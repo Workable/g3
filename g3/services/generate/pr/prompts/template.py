@@ -15,7 +15,7 @@ pr_template = """
 
 ## Jira tickets
 
-[Bulleted list of the jira tickets included if included, if not ommit the jira tickets section.
+[Bulleted list of the jira tickets included if included, if not omit the jira tickets section.
 Each item should start with -]
 
 """
