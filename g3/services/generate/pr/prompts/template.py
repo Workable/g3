@@ -6,7 +6,7 @@ pr_template = """
 
 ## Description
 
-[A short description of the changes made in 1 to 4 sentences. Each sentence should be split with a new line.]
+[A short description of the changes made in 1 to 4 sentences.]
 
 ## Changes
 
