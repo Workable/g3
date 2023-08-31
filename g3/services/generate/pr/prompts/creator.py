@@ -41,13 +41,13 @@ class Creator:
  {config.pr_description_max_words} words in total and it should be helpful to the reader in order to
  understand the changes made. Mention each change only once and summarize listing only the most important changes.
  The reader of the pull request description needs to understand the changes in order to approve the pull request
- or ask for the needed changes. If Jira tickets are provided then include them in the pull request description's
- last section else don't include any section for Jira tickets at all. Do not use the branch name or the repository name.
- Use the following tone when creating the pull request message: {tone}."""
+ or ask for the needed changes. If Jira tickets are provided then include them in the pull request description as a
+ final separate section named ```Jira tickets``` else don't include any section for Jira tickets at all. Do not use
+ the branch name or the repository name Use the following tone when creating the pull request message: {tone}."""
         if include:
             content += f" Include in your response the following: {include}"
         if jira:
-            content += f" Include in the end of your response the following Jira ticket: ```{jira}```."
+            content += f" Include in the end of your response the following Jira tickets: ```{jira}```."
         content += (
             f" Your response should be in Github markdown syntax format and comply on the following template:"
             f"```{pr_template}```."
