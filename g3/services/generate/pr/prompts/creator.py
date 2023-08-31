@@ -37,16 +37,17 @@ class Creator:
  when a contributor is ready to begin the process of merging new code changes with the main project
  repository. The pull request contains a description of what changed and why it changed.
  The pull request's title should be a sentence containing a title summing up the provided commits.
- Leave an new empty line always after the title. The pull reuqest's description should be under
+ Leave an new empty line always after the title. The pull request's description should be under
  {config.pr_description_max_words} words in total and it should be helpful to the reader in order to
- understand the changes made. The reader of the pull request description needs to understand the changes
- in order to approve the pull request or ask for the needed changes. If Jira tickets are provided then include them in
- the pull request description. Do not use the branch or the repository name. Use the following tone when creating
- the pull request message: {tone}."""
+ understand the changes made. Mention each change only once and summarize listing only the most important changes.
+ The reader of the pull request description needs to understand the changes in order to approve the pull request
+ or ask for the needed changes. If Jira tickets are provided then include them in the pull request description as a
+ final separate section named ```Jira tickets``` else don't include any section for Jira tickets at all. Do not use
+ the branch name or the repository name Use the following tone when creating the pull request message: {tone}."""
         if include:
             content += f" Include in your response the following: {include}"
         if jira:
-            content += f" Include in the end of your response the following Jira ticket: ```{jira}```."
+            content += f" Include in the end of your response the following Jira tickets: ```{jira}```."
         content += (
             f" Your response should be in Github markdown syntax format and comply on the following template:"
             f"```{pr_template}```."
