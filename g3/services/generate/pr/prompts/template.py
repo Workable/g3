@@ -10,7 +10,7 @@ pr_template = """
 
 ## Changes
 
-[Bulleted list of at most 10 changes made. Each item should start with -]
+[Bulleted list of 1 to 5 changes made. Do not exceed 5 changes. Each item should start with -]
 
 
 ## Jira tickets
