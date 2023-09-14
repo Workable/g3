@@ -1,4 +1,4 @@
-name: Push project build to JFrog Artifactory
+name: Push project build to JFrog Artifactory and PyPI
 
 on:
   workflow_dispatch:
