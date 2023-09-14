@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Deploy
 
     steps:
       # This action checks out the code from the repository
@@ -25,3 +26,24 @@ jobs:
           make install
           . .venv/bin/activate
           make test
+
+      - name: Post to a Slack channel
+        if: always()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: 'C05P40DCGAK'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "G3 CI/PR-${{ github.event.pull_request.html_url }}: ${{ job.status }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_WORKABLE_APP_OAUTH_TOKEN }}
