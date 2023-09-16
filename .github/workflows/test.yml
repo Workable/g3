@@ -9,7 +9,6 @@ jobs:
     environment: Deploy
 
     steps:
-      # This action checks out the code from the repository
       - name: Get starting time for reporting
         id: start
         run: echo "start_time=$(date +%s)" >> $GITHUB_OUTPUT
@@ -37,7 +36,9 @@ jobs:
           end_time=$(date +%s)
           start_time=${{ steps.start.outputs.start_time }}
           elapsed_time=$(($end_time-$start_time))
-          echo "overall_time=$(elapsed_time)" >> $GITHUB_OUTPUT
+          formatted_time=$($(date -u -d @$elapsed_time +"%M:%S")
+          echo $formatted_time
+          echo "overall_time=$formatted_time" >> $GITHUB_OUTPUT
 
       - name: Post to a Slack channel
         if: always()
