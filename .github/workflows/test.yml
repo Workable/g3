@@ -36,7 +36,7 @@ jobs:
           end_time=$(date +%s)
           start_time=${{ steps.start.outputs.start_time }}
           elapsed_time=$(($end_time-$start_time))
-          formatted_time=$($(date -u -d @$elapsed_time +"%M:%S")
+          formatted_time=$(date -u -d @$elapsed_time +"%M:%S")
           echo $formatted_time
           echo "overall_time=$formatted_time" >> $GITHUB_OUTPUT
 
