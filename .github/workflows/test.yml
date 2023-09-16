@@ -10,6 +10,10 @@ jobs:
 
     steps:
       # This action checks out the code from the repository
+      - name: Get starting time for reporting
+        id: start
+        run: echo "::set-output name=start_time::$(date +%s)"
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -27,6 +31,14 @@ jobs:
           . .venv/bin/activate
           make test
 
+      - name: Record job end time and calculate elapsed time
+        id: end
+        run: |
+          end_time=$(date +%s)
+          start_time=${{ steps.start.outputs.start_time }}
+          elapsed_time=$(($end_time-$start_time))
+          echo "::set-output name=overall_time::$(elapsed_time)"
+
       - name: Post to a Slack channel
         if: always()
         id: slack
@@ -40,7 +52,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "G3 CI/PR-${{ github.event.pull_request.html_url }}: ${{ job.status }}"
+                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time:${{ steps.end.outputs.overall_time }}\nBranch: ${{ github.ref_name }}\nPR: ${{ github.event.pull_request.html_url }}```"
                   }
                 }
               ]
