@@ -12,7 +12,7 @@ jobs:
       # This action checks out the code from the repository
       - name: Get starting time for reporting
         id: start
-        run: echo "::set-output name=start_time::$(date +%s)"
+        run: echo "start_time=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -37,7 +37,7 @@ jobs:
           end_time=$(date +%s)
           start_time=${{ steps.start.outputs.start_time }}
           elapsed_time=$(($end_time-$start_time))
-          echo "::set-output name=overall_time::$(elapsed_time)"
+          echo "overall_time=$(elapsed_time)" >> $GITHUB_OUTPUT
 
       - name: Post to a Slack channel
         if: always()
