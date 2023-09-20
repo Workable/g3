@@ -2,6 +2,9 @@ name: Run tests
 
 on:
   pull_request:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   build:
@@ -53,7 +56,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.diff_url }}```"
+                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}```"
                   }
                 }
               ]
