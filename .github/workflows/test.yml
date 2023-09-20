@@ -56,7 +56,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.url }}/commits/${{ github.event.pull_request.head.sha }}\nCommit message: ${{ github.event.pull_request.head.commit.message }}```"
+                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}\nMessage: ${{ github.event.pull_request.commits[-1].message }}```"
                   }
                 }
               ]
