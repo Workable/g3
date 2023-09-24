@@ -33,7 +33,7 @@ jobs:
           . .venv/bin/activate
           make test
 
-      - name: Record job end time and calculate elapsed time
+      - name: Record job end time, calculate elapsed time, and get the latest commit message
         id: end
         run: |
           end_time=$(date +%s)
@@ -42,6 +42,7 @@ jobs:
           formatted_time=$(date -u -d @$elapsed_time +"%M:%S")
           echo $formatted_time
           echo "overall_time=$formatted_time" >> $GITHUB_OUTPUT
+          echo "commit_message=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
 
       - name: Post to a Slack channel
         if: always()
@@ -56,7 +57,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}\n\n    ${{ github.event.pull_request.head.commit.message }}```"
+                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}\n\n    ${{ steps.end.outputs.commit_message }}```"
                   }
                 }
               ]
