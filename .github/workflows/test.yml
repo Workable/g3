@@ -2,15 +2,24 @@ name: Run tests
 
 on:
   pull_request:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Deploy
 
     steps:
-      # This action checks out the code from the repository
+      - name: Get starting time for reporting
+        id: start
+        run: echo "start_time=$(date +%s)" >> $GITHUB_OUTPUT
+
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install python
         uses: actions/setup-python@v4
@@ -25,3 +34,35 @@ jobs:
           make install
           . .venv/bin/activate
           make test
+
+      - name: Record job end time, calculate elapsed time, and get the latest commit message
+        id: end
+        run: |
+          end_time=$(date +%s)
+          start_time=${{ steps.start.outputs.start_time }}
+          elapsed_time=$(($end_time-$start_time))
+          formatted_time=$(date -u -d @$elapsed_time +"%M:%S")
+          echo $formatted_time
+          echo "overall_time=$formatted_time" >> $GITHUB_OUTPUT
+          echo "commit_message=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
+
+      - name: Post to a Slack channel
+        if: always()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: 'C05P40DCGAK'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}\n\n    ${{ steps.end.outputs.commit_message }}```"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_WORKABLE_APP_OAUTH_TOKEN }}
