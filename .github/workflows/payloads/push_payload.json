@@ -1,0 +1,12 @@
+{
+    "blocks": [
+
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "G3 Push to ${{ env.branch }} : ${{ env.current_job_status }}\n```Time   : ${{ env.overall_time }}\nDiff   : ${{ env.diff}}\n\n    ${{ env.commit_message }}```"
+            }
+        }
+    ]
+}
