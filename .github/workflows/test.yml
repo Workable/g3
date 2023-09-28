@@ -44,7 +44,7 @@ jobs:
           formatted_time=$(date -u -d @$elapsed_time +"%M:%S")
           echo "overall_time=$formatted_time" >> $GITHUB_ENV
           echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-          echo "branch=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
+          echo "branch=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
           echo "pr_url=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
           echo "diff=${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
           echo "commit_message=$(git log --format=%s -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_ENV
