@@ -50,7 +50,7 @@ jobs:
           echo "commit_message=$(git log --format=%s -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_ENV
           echo "commit=${{ github.sha }}" >> $GITHUB_ENV
           echo "author=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
-          echo "date=$(git show -s --format=%ci ${{ github.sha }}) | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
+          echo "date=$(git show -s --format=%ci ${{ github.sha }} | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
           echo "current_job_status=${{ job.status }}" >> $GITHUB_ENV
 
       - name: Record job data for push event
