@@ -5,7 +5,7 @@
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "G3 Push to ${{ env.branch }} : ${{ env.current_job_status }}\n```Time   : ${{ env.overall_time }}\nDiff   : ${{ env.diff}}\n\n    ${{ env.commit_message }}```"
+                "text": "G3 Push to ${{ env.branch }} : ${{ env.current_job_status }}\n```Time   : ${{ env.overall_time }}\nDiff   : ${{ env.diff}}\nCommit : ${{ env.commit }}\nAuthor : ${{ env.author }}\nDate   : ${{ env.date }}\n\n    ${{ env.commit_message }}```"
             }
         }
     ]
