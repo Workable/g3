@@ -49,7 +49,7 @@ jobs:
           echo "diff=${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
           echo "commit_message=$(git log --format=%s -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_ENV
           echo "commit=${{ github.sha }}" >> $GITHUB_ENV
-          echo "author=${{ github.event.pull_request.user.login }}" >> $GITHUB_ENV
+          echo "author=$(git log --format='%an <%ae>' -n 1 ${{ github.sha }})" >> $GITHUB_ENV
           echo "date=$(git show -s --format=%ci ${{ github.sha }} | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
           echo "current_job_status=${{ job.status }}" >> $GITHUB_ENV
 
@@ -66,7 +66,7 @@ jobs:
           echo "commit_message=$(git log --format=%s -n 1 ${{ github.sha }})" >> $GITHUB_ENV
           echo "commit=${{ github.sha }}" >> $GITHUB_ENV
           echo "author=${{ github.event.pusher.name }}" >> $GITHUB_ENV
-          echo "date=$(git show -s --format=%ci ${{ github.sha }}) | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
+          echo "date=$(git show -s --format=%ci ${{ github.sha }} | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
           echo "current_job_status=${{ job.status }}" >> $GITHUB_ENV
 
       - name: Post to Slack about the result of the Pull Request
