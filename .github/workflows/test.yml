@@ -35,34 +35,55 @@ jobs:
           . .venv/bin/activate
           make test
 
-      - name: Record job end time, calculate elapsed time, and get the latest commit message
-        id: end
+      - name: Record job data for Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           end_time=$(date +%s)
           start_time=${{ steps.start.outputs.start_time }}
           elapsed_time=$(($end_time-$start_time))
           formatted_time=$(date -u -d @$elapsed_time +"%M:%S")
-          echo $formatted_time
-          echo "overall_time=$formatted_time" >> $GITHUB_OUTPUT
-          echo "commit_message=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_OUTPUT
+          echo "overall_time=$formatted_time" >> $GITHUB_ENV
+          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          echo "branch=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+          echo "pr_url=${{ github.event.pull_request.html_url }}" >> $GITHUB_ENV
+          echo "diff=${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+          echo "commit_message=$(git log --format=%s -n 1 ${{ github.event.pull_request.head.sha }})" >> $GITHUB_ENV
+          echo "commit=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+          echo "author=$(git log --format='%an <%ae>' -n 1 ${{ github.sha }})" >> $GITHUB_ENV
+          echo "date=$(git show -s --format=%ci ${{ github.sha }} | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
+          echo "current_job_status=${{ job.status }}" >> $GITHUB_ENV
 
-      - name: Post to a Slack channel
-        if: always()
+      - name: Record job data for push event
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          end_time=$(date +%s)
+          start_time=${{ steps.start.outputs.start_time }}
+          elapsed_time=$(($end_time-$start_time))
+          formatted_time=$(date -u -d @$elapsed_time +"%M:%S")
+          echo "overall_time=$formatted_time" >> $GITHUB_ENV
+          echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+          echo "diff=${{ github.event.compare }}" >> $GITHUB_ENV
+          echo "commit_message=$(git log --format=%s -n 1 ${{ github.sha }})" >> $GITHUB_ENV
+          echo "commit=${{ github.sha }}" >> $GITHUB_ENV
+          echo "author=${{ github.event.pusher.name }}" >> $GITHUB_ENV
+          echo "date=$(git show -s --format=%ci ${{ github.sha }} | xargs -I{} date -d {} +'%a %b %d %T %Y %z')" >> $GITHUB_ENV
+          echo "current_job_status=${{ job.status }}" >> $GITHUB_ENV
+
+      - name: Post to Slack about the result of the Pull Request
+        if: ( always() && ${{ github.event_name == 'pull_request' }} )
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          channel-id: 'C05P40DCGAK'
+          payload-file-path: ".github/workflows/payloads/pr_payload.json"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_WORKABLE_APP_OAUTH_TOKEN }}
+
+      - name: Post to Slack about the result of the push
+        if: ( always() && ( github.event_name == 'push' && github.ref == 'refs/heads/main' ) )
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: 'C05P40DCGAK'
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "G3 CI/PR-${{ github.event.pull_request.number }}: ${{ job.status }}\n```Time   : ${{ steps.end.outputs.overall_time }}\nBranch : ${{ github.head_ref }}\nPR     : ${{ github.event.pull_request.html_url }}\nDiff   : ${{ github.event.pull_request.html_url }}/commits/${{ github.event.pull_request.head.sha }}\n\n    ${{ steps.end.outputs.commit_message }}```"
-                  }
-                }
-              ]
-            }
+          payload-file-path: ".github/workflows/payloads/push_payload.json"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_WORKABLE_APP_OAUTH_TOKEN }}

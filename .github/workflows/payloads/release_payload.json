@@ -1,0 +1,25 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Release job status: ${{ env.current_job_status }}"
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "image",
+					"image_url": "https://github.com/Workable/g3/blob/main/docs/logo.png?raw=true",
+					"alt_text": "G"
+				},
+				{
+					"type": "mrkdwn",
+					"text": "```Release: ${{ env.latest_tag }}\nRelease description:\n    ${{ env.release_description }}```"
+				}
+			]
+		}
+	]
+}

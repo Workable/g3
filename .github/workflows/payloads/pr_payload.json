@@ -1,0 +1,12 @@
+{
+    "blocks": [
+
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "G3 CI/PR-${{ env.pr_number }}: ${{ env.current_job_status }}\n```Time   : ${{ env.overall_time }}\nBranch : ${{ env.branch }}\nPR     : ${{ env.pr_url }}\nDiff   : ${{ env.diff}}\nCommit : ${{ env.commit }}\nAuthor : ${{ env.author }}\nDate   : ${{ env.date }}\n\n    ${{ env.commit_message }}```"
+            }
+        }
+    ]
+}
