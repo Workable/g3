@@ -1,4 +1,4 @@
-name: Push project build to JFrog Artifactory and PyPI
+name: Push project build to PyPI
 
 on:
   release:
@@ -7,15 +7,15 @@ on:
   workflow_dispatch:
     inputs:
       branch_to_build:
-        description: 'Specify the branch you want to build'
+        description: "Specify the branch you want to build"
         required: false
         default: $GITHUB_REF
       version_to_build:
-        description: 'Specify the version you want to build: use SEMVER format only'
+        description: "Specify the version you want to build: use SEMVER format only"
         required: false
         default: "0.0.0.dev"
       build_description:
-        description: 'Provide a description for the build'
+        description: "Provide a description for the build"
         required: true
         default: "Custom build"
 
@@ -24,8 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: Deploy
     env:
-      ARTIFACTORY_USERNAME: ${{ vars.JFROG_USER }}
-      ARTIFACTORY_API_KEY: ${{ secrets.JFROG_API_KEY}}
       POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_KEY }}
 
     steps:
@@ -66,7 +64,7 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          channel-id: 'C05PLVB1Y04'
+          channel-id: "C05PLVB1Y04"
           payload-file-path: ".github/workflows/payloads/release_payload.json"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_WORKABLE_APP_OAUTH_TOKEN }}
