@@ -71,7 +71,7 @@ jobs:
 
       - name: Post to Slack about the result of the Pull Request
         if: ( always() && github.event_name == 'pull_request' && !(github.event.action == 'closed' && github.event.pull_request.merged == true) )
-        uses: slackapi/slack-github-action@v1.24.0
+        uses: slackapi/slack-github-action@v1.25.0
         with:
           channel-id: "C05P40DCGAK"
           payload-file-path: ".github/workflows/payloads/pr_payload.json"
@@ -81,7 +81,7 @@ jobs:
       - name: Post to Slack about the result of the push
         if: ( always() && github.event_name == 'push' && github.ref == 'refs/heads/main' )
         id: slack
-        uses: slackapi/slack-github-action@v1.24.0
+        uses: slackapi/slack-github-action@v1.25.0
         with:
           channel-id: "C05P40DCGAK"
           payload-file-path: ".github/workflows/payloads/push_payload.json"
