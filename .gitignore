@@ -82,6 +82,7 @@ celerybeat-schedule
 !.env.test
 
 # virtualenv
+.venv
 venv/
 ENV/
 
