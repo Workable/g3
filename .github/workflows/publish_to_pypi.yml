@@ -62,7 +62,7 @@ jobs:
 
       - name: Notify Slack of release workflow result
         if: always()
-        uses: slackapi/slack-github-action@v1.25.0
+        uses: slackapi/slack-github-action@v1.26.0
         with:
           channel-id: "C05PLVB1Y04"
           payload-file-path: ".github/workflows/payloads/release_payload.json"
