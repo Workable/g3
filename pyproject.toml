@@ -24,13 +24,13 @@ g3 = "g3.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-typer = { extras = ["all"], version = "^0.9.0" }
+typer = { extras = ["all"], version = ">=0.9,<0.13" }
 openai = "^0.27.8"
 asyncio = "^3.4.3"
 inquirer = "^3.1.3"
 pydantic = { version = "^v1.10.10", extras = ["dotenv"] }
 tiktoken = "^0.6.0"
-pygithub = "^1.59.0"
+pygithub = ">=1.59,<3.0"
 pyperclip = "^1.8.2"
 
 
@@ -42,9 +42,9 @@ mypy = "^1.4.1"
 
 
 [tool.poetry.group.test.dependencies]
-pytest = "^7.4.0"
-pytest-cov = "^4.1.0"
-faker = "^19.1.0"
+pytest = ">=7.4,<9.0"
+pytest-cov = ">=4.1,<6.0"
+faker = ">=19.1,<26.0"
 
 
 [tool.poetry.group.dev.dependencies]
