@@ -585,13 +585,13 @@ xmod = "*"
 
 [[package]]
 name = "faker"
-version = "19.13.0"
+version = "25.2.0"
 description = "Faker is a Python package that generates fake data for you."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Faker-19.13.0-py3-none-any.whl", hash = "sha256:da880a76322db7a879c848a0771e129338e0a680a9f695fd9a3e7a6ac82b45e1"},
-    {file = "Faker-19.13.0.tar.gz", hash = "sha256:14ccb0aec342d33aa3889a864a56e5b3c2d56bce1b89f9189f4fbc128b9afc1e"},
+    {file = "Faker-25.2.0-py3-none-any.whl", hash = "sha256:cfe97c4857c4c36ee32ea4aaabef884895992e209bae4cbd26807cf3e05c6918"},
+    {file = "Faker-25.2.0.tar.gz", hash = "sha256:45b84f47ff1ef86e3d1a8d11583ca871ecf6730fad0660edadc02576583a2423"},
 ]
 
 [package.dependencies]
@@ -1947,4 +1947,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "788158c9e61952b519bdbfb4a70d3ed5bc7d5e8aca1f19d8475e28f22b32bddd"
+content-hash = "6b19039832b0e9bb236ddd88c6519b2d68ed73aeacbcb1ce11dba01037395b56"
