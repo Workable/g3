@@ -28,7 +28,7 @@ typer = { extras = ["all"], version = ">=0.9,<0.13" }
 openai = "^0.27.8"
 asyncio = "^3.4.3"
 inquirer = "^3.1.3"
-pydantic = { version = "^v1.10.10", extras = ["dotenv"] }
+pydantic = { version = ">=1.10.10,<3.0.0", extras = ["dotenv"] }
 tiktoken = "^0.6.0"
 pygithub = ">=1.59,<3.0"
 pyperclip = "^1.8.2"
