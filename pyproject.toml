@@ -32,6 +32,7 @@ pydantic = { version = ">=1.10.10,<3.0.0", extras = ["dotenv"] }
 tiktoken = "^0.6.0"
 pygithub = ">=1.59,<3.0"
 pyperclip = "^1.8.2"
+pydantic-settings = "^2.2.1"
 
 
 [tool.poetry.group.lint.dependencies]
