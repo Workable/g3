@@ -1,6 +1,7 @@
 from typing import Optional
 
-from pydantic import BaseSettings, Extra
+from pydantic import Extra
+from pydantic_settings import BaseSettings
 
 from g3.utils.dictionary import without_nulls
 
