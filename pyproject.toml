@@ -25,7 +25,7 @@ g3 = "g3.main:app"
 [tool.poetry.dependencies]
 python = "^3.11"
 typer = { extras = ["all"], version = ">=0.9,<0.13" }
-openai = ">=1.35.10,<1.41.0"
+openai = ">=1.35.10,<1.43.0"
 asyncio = "^3.4.3"
 inquirer = "^3.1.3"
 pydantic = { version = ">=1.10.10,<3.0.0", extras = ["dotenv"] }
